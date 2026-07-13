@@ -9,7 +9,7 @@ namespace AvtoTest.Data.Repositories;
 
 public class TestRepository : ITestRepository
 {
-    private string Path { get; set; }
+    private string Path { get; set; } = "D:\\Dotnet Projects\\AvtoTest\\AvtoTest.Data\\bin\\Debug\\net10.0\\";
     public async Task<List<Test>> GetAllTests(string language)
     {
         if (string.IsNullOrEmpty(language)) language = "uzb";
@@ -17,16 +17,16 @@ public class TestRepository : ITestRepository
         switch  (language)
         {
             case "uzb":
-                Path = "uzlotin.json";
+                Path += "uzlotin.json";
                 break;
             case "rus":
-                Path = "rus.json";
+                Path += "rus.json";
                 break;
             case "kiril":
-                Path = "uzkiril.json";
+                Path += "uzkiril.json";
                 break;
             default:
-                Path = "uzlotin.json";
+                Path += "uzlotin.json";
                 break;
         }
         var json = await File.ReadAllTextAsync(Path);

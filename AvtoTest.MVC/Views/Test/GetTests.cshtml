@@ -1,0 +1,23 @@
+﻿@using AvtoTest.Data.Entities.TestEntities
+@model List<Test>
+@{
+    string path = "D:\\Dotnet Projects\\AvtoTest\\AvtoTest.Data\\bin\\Debug\\net10.0\\AvtoTest\\";
+
+}
+@foreach (var test in Model)
+{
+    @if (test.Media.Exist)
+    {
+       var _path = path + $"{test.Media.Name}.png";
+       <img src="@_path" />
+    }
+    <p>@test.Id @test.Question</p>
+    <br />
+    foreach (var choice in test.Choices)
+        {
+            <h4>@choice.Text</h4>    
+        }
+    <br />
+    <h4>Exist: @test.Media.Exist</h4>
+    <h5>@test.Description</h5>
+}

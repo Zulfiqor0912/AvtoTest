@@ -1,0 +1,69 @@
+﻿<h2>Tickets</h2>
+
+<form asp-action="Tickets" method="post">
+    @for (var i = 1; i < 36; i++)
+    {
+        <div class="card">
+            <img src="https://img.magnific.com/free-photo/yellow-ticket-top-view_1101-121.jpg"
+                 alt="Avatar"
+                 style="width: 300px; height: 300px;" />
+
+            <div class="container">
+                <h4>
+                    <b>Ticket @i</b>
+                </h4>
+
+                <button asp-route-id="@i" type="submit">
+                    Go to Ticket
+                </button>
+            </div>
+        </div>
+    }
+</form>
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .flip-card {
+        background-color: transparent;
+        width: 300px;
+        height: 300px;
+        perspective: 1000px;
+    }
+
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .flip-card:hover .flip-card-inner {
+        transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+
+    .flip-card-front {
+        background-color: #bbb;
+        color: black;
+    }
+
+    .flip-card-back {
+        background-color: #2980b9;
+        color: white;
+        transform: rotateY(180deg);
+    }
+</style>
