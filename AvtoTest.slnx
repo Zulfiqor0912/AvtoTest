@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="AvtoTest.Data/AvtoTest.Data.csproj" Id="80fd0e87-0cdb-4be9-bc51-0bd9002d0db4" />
+  <Project Path="AvtoTest.MVC/AvtoTest.MVC.csproj" Id="4dede944-6162-41d9-b3a1-a596fbb59b76" />
+  <Project Path="AvtoTest.Service/AvtoTest.Service.csproj" Id="c13ce765-16de-4ccd-9ffa-dc99c9c3c9e2" />
+</Solution>
