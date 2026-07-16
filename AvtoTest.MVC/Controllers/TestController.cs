@@ -17,10 +17,28 @@ public class TestController : Controller
         return View();
     }
 
-    public async Task<IActionResult> GetTests()
+    public async Task<IActionResult> GetTests(Ticket ticket)
     {
-        var tests = (await testService.ReadFromFile()).Where(t => t.Id <= 19).ToList();
+        var tests = (await testService.ReadFromFile())
+            .Where(t => t.Id >= ticket.StartIndex && t.Id <= ticket.EndIndex)
+            .ToList();
+
+        ViewBag.TicketId = ticket.Id;
+
+        ViewBag.Context = HttpContext;
         return View(tests);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetTests(byte ticketId = 0, int testId = 0, int choiceId = 0)
+    {
+        var ticket = new Ticket() { Id = ticketId };
+        if (testId != 0)
+        {
+            HttpContext.Response.Cookies.Append(testId.ToString(), choiceId.ToString());
+        }
+
+        return RedirectToAction("Tickets", ticket);
     }
 
     public IActionResult Tickets()

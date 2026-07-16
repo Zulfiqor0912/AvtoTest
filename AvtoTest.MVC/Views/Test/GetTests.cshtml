@@ -4,6 +4,11 @@
     string path = "D:\\Dotnet Projects\\AvtoTest\\AvtoTest.Data\\bin\\Debug\\net10.0\\AvtoTest\\";
 
 }
+
+@{
+    byte ticketId = Convert.ToByte(ViewBag.TicketId);
+    HttpContext httpContext = (HttpContext)ViewBag.Context;
+}
 @foreach (var test in Model)
 {
     @if (test.Media.Exist)
@@ -13,10 +18,44 @@
     }
     <p>@test.Id @test.Question</p>
     <br />
-    foreach (var choice in test.Choices)
-        {
-            <h4>@choice.Text</h4>    
+
+    <form asp-action="GetTests" method="post">
+        @{
+            int row = 0;
         }
+
+        @foreach (var choice in test.Choices)
+        {
+            string choiceId = httpContext.Request.Cookies[test.Id.ToString()]!;
+
+            if (!string.IsNullOrEmpty(choiceId))
+            {
+                int selectedId = Convert.ToInt32(choiceId);
+
+                if (row == selectedId)
+                {
+                    if (choice.Answer)
+                    {
+                        <button class="btn btn-success" type="submit">@choice.Text</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-danger" type="submit">@choice.Text</button>
+                    }
+                }
+                else
+                {
+                    <button class="btn" type="submit">@choice.Text</button>
+                }
+            }
+            else
+            {
+               <button asp-route-ticketId="@ticketId" asp-route-testId="@test.Id" asp-route-choiceId = "@choiceId" class="btn btn-primary" type="submit">@choice.Text</button>
+            }
+            <br />
+             row++;
+            }
+    </form>
     <br />
     <h4>Exist: @test.Media.Exist</h4>
     <h5>@test.Description</h5>
