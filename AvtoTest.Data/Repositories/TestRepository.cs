@@ -9,7 +9,7 @@ namespace AvtoTest.Data.Repositories;
 
 public class TestRepository : ITestRepository
 {
-    private string Path { get; set; } = "D:\\Dotnet Projects\\AvtoTest\\AvtoTest.Data\\bin\\Debug\\net10.0\\";
+    private string Path { get; set; } = "G:\\Zulfiqor\\MyLearn\\DotNet\\Zulfiqor0912\\Avto Test Web\\AvtoTest.Data\\bin\\Debug\\net10.0\\";
     public async Task<List<Test>> GetAllTests(string language)
     {
         if (string.IsNullOrEmpty(language)) language = "uzb";

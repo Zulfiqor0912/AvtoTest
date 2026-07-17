@@ -1,7 +1,7 @@
 ﻿@using AvtoTest.Data.Entities.TestEntities
 @model List<Test>
 @{
-    string path = "D:\\Dotnet Projects\\AvtoTest\\AvtoTest.Data\\bin\\Debug\\net10.0\\AvtoTest\\";
+    string path = "G:\\Zulfiqor\\MyLearn\\DotNet\\Zulfiqor0912\\Avto Test Web\\AvtoTest.Data\\bin\\Debug\\net10.0\\AvtoTest";
 
 }
 
@@ -13,8 +13,8 @@
 {
     @if (test.Media.Exist)
     {
-       var _path = path + $"{test.Media.Name}.png";
-       <img src="@_path" />
+       var src = $"AvtoTest/{test.Id}.png";
+       <img src="@src"></img> 
     }
     <p>@test.Id @test.Question</p>
     <br />
@@ -50,7 +50,13 @@
             }
             else
             {
-               <button asp-route-ticketId="@ticketId" asp-route-testId="@test.Id" asp-route-choiceId = "@choiceId" class="btn btn-primary" type="submit">@choice.Text</button>
+               <button 
+                   asp-route-ticketId="@ticketId" 
+                   asp-route-testId="@test.Id" 
+                   asp-route-choiceId = "@choiceId" 
+                   class="btn btn-primary" 
+                   type="submit">@choice.Text
+               </button>
             }
             <br />
              row++;

@@ -7,6 +7,7 @@ namespace AvtoTest.MVC.Controllers;
 public class TestController : Controller
 {
     private readonly ITestService testService;
+    private const string CorrectAnswersCount = "CorrectAnswersCount";
 
     public TestController(ITestService testService)
     {
@@ -32,13 +33,21 @@ public class TestController : Controller
     [HttpPost]
     public async Task<IActionResult> GetTests(byte ticketId = 0, int testId = 0, int choiceId = 0)
     {
+        int count = GetCorrectAnswersCount();
+
         var ticket = new Ticket() { Id = ticketId };
+        var test = (await testService.ReadFromFile()).Find(t => t.Id == testId);
+        if (test.Choices[choiceId].Answer)
+        {
+            count++;
+        }
         if (testId != 0)
         {
-            HttpContext.Response.Cookies.Append(testId.ToString(), choiceId.ToString());
+            AddCookies(testId.ToString(), choiceId.ToString());
+            AddCookies(CorrectAnswersCount, count.ToString());
         }
 
-        return RedirectToAction("Tickets", ticket);
+        return RedirectToAction("GetTests", ticket);
     }
 
     public IActionResult Tickets()
@@ -52,6 +61,31 @@ public class TestController : Controller
     {
         var ticket = new Ticket() { Id = id };
         return RedirectToAction("GetTests", ticket);
+    }
+
+    private void AddCookies(string key, string value)
+    {
+        var check = CheckCookie(key);
+        if (!check)
+        {
+            HttpContext.Response.Cookies.Delete(key);
+        }
+        HttpContext.Response.Cookies.Append(key, value);
+    }
+
+    private bool CheckCookie(string key)
+    {
+        var value = HttpContext.Request.Cookies[key];
+        if (string.IsNullOrEmpty(value)) return true;
+        else return false;
+    }
+
+    private int GetCorrectAnswersCount()
+    {
+        string correctAnswersCount = HttpContext.Request.Cookies["correctAnswersCount"];
+        int count = 0;
+        count = string.IsNullOrEmpty(correctAnswersCount) ? 0 : Convert.ToInt32(correctAnswersCount);
+        return count;
     }
 
 }
