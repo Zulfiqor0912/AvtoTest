@@ -1,5 +1,6 @@
 ﻿using AvtoTest.Data.Entities.TestEntities;
 using AvtoTest.Data.Repositories.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,30 +10,36 @@ namespace AvtoTest.Data.Repositories;
 
 public class TestRepository : ITestRepository
 {
-    private string Path { get; set; } = "G:\\Zulfiqor\\MyLearn\\DotNet\\Zulfiqor0912\\Avto Test Web\\AvtoTest.Data\\bin\\Debug\\net10.0\\";
+    private readonly IHostingEnvironment environment;
+    private string Path => environment.WebRootPath + "\\AvtoTest\\"; 
     public async Task<List<Test>> GetAllTests(string language)
     {
+        string filePath = Path;
         if (string.IsNullOrEmpty(language)) language = "uzb";
         var tests = new List<Test>();
         switch  (language)
         {
             case "uzb":
-                Path += "uzlotin.json";
+                filePath += "uzlotin.json";
                 break;
             case "rus":
-                Path += "rus.json";
+                filePath += "rus.json";
                 break;
-            case "kiril":
-                Path += "uzkiril.json";
+            case "krill":
+                filePath += "uzkiril.json";
                 break;
             default:
-                Path += "uzlotin.json";
+                filePath += "uzlotin.json";
                 break;
         }
-        var json = await File.ReadAllTextAsync(Path);
+        var json = await File.ReadAllTextAsync(filePath);
         tests = JsonConvert.DeserializeObject<List<Test>>(json);
         return tests;
     }
 
-
+    public string GetPath()
+    {
+        var path = environment.WebRootPath;
+        return path;
+    }
 }   

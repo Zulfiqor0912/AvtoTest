@@ -1,68 +1,202 @@
 ﻿@using AvtoTest.Data.Entities.TestEntities
-@model List<Test>
-@{
-    string path = "G:\\Zulfiqor\\MyLearn\\DotNet\\Zulfiqor0912\\Avto Test Web\\AvtoTest.Data\\bin\\Debug\\net10.0\\AvtoTest";
+@model AvtoTest.Data.Entities.TestEntities.Test
 
+@{
 }
 
 @{
     byte ticketId = Convert.ToByte(ViewBag.TicketId);
     HttpContext httpContext = (HttpContext)ViewBag.Context;
+    Ticket ticket = ViewBag.Ticket;
+    var test = Model;
+
+    List<Test> tests = ViewBag.Tests;
 }
-@foreach (var test in Model)
-{
-    @if (test.Media.Exist)
-    {
-       var src = $"AvtoTest/{test.Id}.png";
-       <img src="@src"></img> 
-    }
-    <p>@test.Id @test.Question</p>
-    <br />
 
-    <form asp-action="GetTests" method="post">
-        @{
-            int row = 0;
-        }
+<div class="container">
 
-        @foreach (var choice in test.Choices)
-        {
-            string choiceId = httpContext.Request.Cookies[test.Id.ToString()]!;
+    <div class="languages">
+        <a class="btn btn-primary" asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@test.Id" asp-route-language="rus">Rus</a>
+        <a class="btn btn-primary" asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@test.Id" asp-route-language="krill">Krill</a>
+        <a class="btn btn-primary" asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@test.Id" asp-route-language="uzb">Uzbek</a>
+    </div>
 
-            if (!string.IsNullOrEmpty(choiceId))
-            {
-                int selectedId = Convert.ToInt32(choiceId);
+    <div class="paginition_part">
 
-                if (row == selectedId)
-                {
-                    if (choice.Answer)
+        <a type="submit" class="finish_test_button btn btn-primary" asp-route-ticketId="@ticketId" asp-action="TestResult">
+            testni yakunlash
+        </a>
+
+        <div class="paginition">
+
+            <!-- content in this Section -->
+            <!--
+            <div class="content">
+                <h3>Interview Experiences:</h3>
+                <article>
+                    Share Your Questions/Experience or share
+                    your "Interview Experience", please mail
+                    your interview experience to
+                    review-team@geeksforgeeks.org. Also, to
+                    share interview questions, please add
+                    questions at Contribute a Question! You
+                    can also find company specific Interview
+                    Questions at our PRACTICE portal !
+                </article>
+            </div>
+            -->
+            <!-- pagination elements -->
+            <div class="pagination_section">
+                @{
+                    int previousId;
+                    int nextId;
+
+                    if (test.Id == ticket.StartIndex)
                     {
-                        <button class="btn btn-success" type="submit">@choice.Text</button>
+                        previousId = test.Id;
                     }
                     else
                     {
-                        <button class="btn btn-danger" type="submit">@choice.Text</button>
+                        previousId = test.Id - 1;    
                     }
+
+                    if (test.Id == ticket.EndIndex)
+                    {
+                        nextId = test.Id;
+                    }
+                    else
+                    {
+                        nextId = test.Id + 1;
+                    }
+                }
+                <a asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@previousId">Previous</a>
+
+                @for (int i = ticket.StartIndex; i <= ticket.EndIndex; i++)
+                {
+                    string choiceId = httpContext.Request.Cookies[i.ToString()]!;
+
+                    if (!string.IsNullOrEmpty(choiceId))
+                    {
+                        int selectedId = Convert.ToInt32(choiceId);
+                        var selectedTest = tests.Find(t => t.Id == i);
+                        var answer = selectedTest.Choices[selectedId].Answer;
+                        if (answer)
+                        {
+                            <a class="correctAnswer" asp-action="GetTests" asp-route-ticketId="@ticket.Id" asp-route-testId="@i">@i</a>
+                        }
+                        else
+                        {
+                            <a class="incorrectAnswer" asp-action="GetTests" asp-route-ticketId="@ticket.Id" asp-route-testId="@i">@i</a>
+                        }
+                    }
+                    else
+                    {
+                        if (test.Id == i)
+                        {
+                            <a class="active" asp-action="GetTests" asp-route-ticketId="@ticket.Id" asp-route-testId="@i">@i</a>
+                        }
+                        else
+                        {
+                            <a asp-action="GetTests" asp-route-ticketId="@ticket.Id" asp-route-testId="@i">@i</a>
+                        }
+                    }
+                }
+
+                <a asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@nextId">Next</a>
+            </div>
+
+        </div>
+
+        <div class="timer">
+            <div id="app"></div>
+        </div>
+
+    </div>
+
+    <div class="question_part">
+
+        <p>@test.Question</p>
+
+        <div class="line"></div>
+
+        <div class="variants_part">
+
+            <div class="image_part">
+
+                @if (test.Media.Exist)
+                {
+                    var path = $"{test.Media.Name}.png";
+                    <img src="~/AvtoTest/@path"
+                         alt="" />
                 }
                 else
                 {
-                    <button class="btn" type="submit">@choice.Text</button>
+                    <img src="~/DefaultImg.jpg" alt="" />
                 }
-            }
-            else
-            {
-               <button 
-                   asp-route-ticketId="@ticketId" 
-                   asp-route-testId="@test.Id" 
-                   asp-route-choiceId = "@choiceId" 
-                   class="btn btn-primary" 
-                   type="submit">@choice.Text
-               </button>
-            }
-            <br />
-             row++;
-            }
-    </form>
-    <br />
-    <h4>Exist: @test.Media.Exist</h4>
-    <h5>@test.Description</h5>
-}
+                
+            </div>
+
+            <div class="variant">
+
+                <form asp-action="GetTestsPost" method="post">
+
+                    @{
+                        int row = 0;
+                    }
+
+                    @foreach (var choice in test.Choices)
+                    {
+                        string choiceId = httpContext.Request.Cookies[test.Id.ToString()]!;
+
+                        if (!string.IsNullOrEmpty(choiceId))
+                        {
+                            int selectedId = Convert.ToInt32(choiceId);
+
+                            if (row == selectedId)
+                            {
+                                if (choice.Answer)
+                                {
+                                    <button disabled class="btn btn-success" type="submit">
+                                        @choice.Text
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button disabled class="btn btn-danger" type="submit">
+                                        @choice.Text
+                                    </button>
+                                }
+                            }
+                            else
+                            {
+                                <button disabled class="btn" type="submit">
+                                    @choice.Text
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            <button asp-route-ticketId="@ticketId"
+                                    asp-route-testId="@test.Id"
+                                    asp-route-choiceId="@row"
+                                    asp-action="GetTestsPost"
+                                    class="btn btn-primary"
+                                    type="submit">
+                                @choice.Text
+                            </button>
+                        }
+
+                        <br />
+
+                        row++;
+                    }
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

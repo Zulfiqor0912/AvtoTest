@@ -8,4 +8,6 @@ namespace AvtoTest.Data.Repositories.Interfaces;
 public interface ITestRepository
 {
     public Task<List<Test>> GetAllTests(string? language = null);
+
+    public string GetPath();
 }

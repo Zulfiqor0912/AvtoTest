@@ -18,20 +18,35 @@ public class TestController : Controller
         return View();
     }
 
-    public async Task<IActionResult> GetTests(Ticket ticket)
+    public async Task<IActionResult> GetTests(byte ticketId, int testId = 0, string language = null)
     {
+        var ticket = new Ticket() { Id = ticketId };
+
+        if (!string.IsNullOrEmpty(language))
+        {
+
+            testService.ChangeLanguage(language);
+        }
+        if (testId == 0)
+        {
+            testId = ticket.StartIndex;
+        }
+
         var tests = (await testService.ReadFromFile())
             .Where(t => t.Id >= ticket.StartIndex && t.Id <= ticket.EndIndex)
             .ToList();
 
+        var test = tests.Find(t => t.Id == testId);
         ViewBag.TicketId = ticket.Id;
-
+        ViewBag.Ticket = ticket;
         ViewBag.Context = HttpContext;
-        return View(tests);
+        ViewBag.Tests = tests;
+
+        return View(test);
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetTests(byte ticketId = 0, int testId = 0, int choiceId = 0)
+    public async Task<IActionResult> GetTestsPost(byte ticketId = 0, int testId = 0, int choiceId = 0)
     {
         int count = GetCorrectAnswersCount();
 
@@ -47,7 +62,7 @@ public class TestController : Controller
             AddCookies(CorrectAnswersCount, count.ToString());
         }
 
-        return RedirectToAction("GetTests", ticket);
+        return RedirectToAction("GetTests", new { ticketId = ticketId, testId = testId});
     }
 
     public IActionResult Tickets()
@@ -59,8 +74,21 @@ public class TestController : Controller
     [HttpPost]
     public IActionResult Tickets(byte id)
     {
-        var ticket = new Ticket() { Id = id };
-        return RedirectToAction("GetTests", ticket);
+        var ticket = new Ticket { Id = id };
+
+        DeleteCookies(ticket);
+
+        return RedirectToAction("GetTests", new { ticketId = id, testId = 0 });
+    }
+
+    public IActionResult TestResult(byte ticketId)
+    {
+        var correctAnswerCount = GetCorrectAnswersCount();
+        ViewBag.Count = correctAnswerCount;
+
+        var ticket = new Ticket { Id = ticketId };
+        DeleteCookies(ticket);
+        return View();
     }
 
     private void AddCookies(string key, string value)
@@ -71,6 +99,27 @@ public class TestController : Controller
             HttpContext.Response.Cookies.Delete(key);
         }
         HttpContext.Response.Cookies.Append(key, value);
+    }
+
+    private void DeleteCookies(string key)
+    {
+        var check = CheckCookie(key);
+        if (check)
+        {
+            HttpContext.Response.Cookies.Delete(key);
+        }
+    }
+
+    private void DeleteCookies(Ticket ticket)
+    {
+        for (int i = ticket.StartIndex; i <= ticket.EndIndex; i++)
+        {
+            DeleteCookies(i.ToString());
+            if (i == ticket.StartIndex)
+            {
+                DeleteCookies(CorrectAnswersCount);
+            }
+        }
     }
 
     private bool CheckCookie(string key)
@@ -86,6 +135,13 @@ public class TestController : Controller
         int count = 0;
         count = string.IsNullOrEmpty(correctAnswersCount) ? 0 : Convert.ToInt32(correctAnswersCount);
         return count;
+    }
+
+    public IActionResult GetPath()
+    {
+        var path = testService.GetPath();
+        ViewBag.Path = path;
+        return View();
     }
 
 }

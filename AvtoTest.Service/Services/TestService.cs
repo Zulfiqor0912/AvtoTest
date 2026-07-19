@@ -22,4 +22,15 @@ public class TestService : ITestService
         var tests = await testRepository.GetAllTests();
         return tests;
     }
+
+    public async Task ChangeLanguage(string language)
+    {
+        Tests = await testRepository.GetAllTests(language);
+    }
+
+    public string GetPath()
+    {
+        var path = testRepository.GetPath();
+        return path;
+    }
 }
