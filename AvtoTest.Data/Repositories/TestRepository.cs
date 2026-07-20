@@ -17,7 +17,7 @@ public class TestRepository : ITestRepository
     {
         this.environment = environment;
     }
-    public List<Test> GetAllTests(string? language = null)
+    public List<Test> ReadFromFile(string? language = null)
     {
         string filePath = Path;
         if (string.IsNullOrEmpty(language)) language = "uzb";

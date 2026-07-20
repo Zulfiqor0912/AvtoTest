@@ -7,7 +7,7 @@ namespace AvtoTest.Data.Repositories.Interfaces;
 
 public interface ITestRepository
 {
-    public List<Test> GetAllTests(string? language = null);
+    public List<Test> ReadFromFile(string? language = null);
 
     public string GetPath();
 }
