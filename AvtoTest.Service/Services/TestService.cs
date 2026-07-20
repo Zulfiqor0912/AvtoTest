@@ -14,18 +14,18 @@ public class TestService : ITestService
     public TestService(ITestRepository testRepository)
     {
         this.testRepository = testRepository;
-        Tests = new List<Test>();
+        Tests = testRepository.GetAllTests();
     }
 
-    public async Task<List<Test>> ReadFromFile()
+    public List<Test> ReadFromFile()
     {
-        var tests = await testRepository.GetAllTests();
+        var tests = testRepository.GetAllTests();
         return tests;
     }
 
-    public async Task ChangeLanguage(string language)
+    public void ChangeLanguage(string language)
     {
-        Tests = await testRepository.GetAllTests(language);
+        Tests = testRepository.GetAllTests(language);
     }
 
     public string GetPath()

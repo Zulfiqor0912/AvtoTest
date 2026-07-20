@@ -11,12 +11,17 @@ namespace AvtoTest.Data.Repositories;
 public class TestRepository : ITestRepository
 {
     private readonly IHostingEnvironment environment;
-    private string Path => environment.WebRootPath + "\\AvtoTest\\"; 
-    public async Task<List<Test>> GetAllTests(string language)
+    private string Path => environment.WebRootPath + "\\AvtoTest\\";
+
+    public TestRepository(IHostingEnvironment environment)
+    {
+        this.environment = environment;
+    }
+    public List<Test> GetAllTests(string? language = null)
     {
         string filePath = Path;
         if (string.IsNullOrEmpty(language)) language = "uzb";
-        var tests = new List<Test>();
+
         switch  (language)
         {
             case "uzb":
@@ -25,21 +30,19 @@ public class TestRepository : ITestRepository
             case "rus":
                 filePath += "rus.json";
                 break;
-            case "krill":
+            case "kiril":
                 filePath += "uzkiril.json";
                 break;
-            default:
-                filePath += "uzlotin.json";
-                break;
         }
-        var json = await File.ReadAllTextAsync(filePath);
-        tests = JsonConvert.DeserializeObject<List<Test>>(json);
+        var json = File.ReadAllText(filePath);
+        List<Test> tests = JsonConvert.DeserializeObject<List<Test>>(json)!;
         return tests;
     }
 
     public string GetPath()
     {
         var path = environment.WebRootPath;
+        var m = path + "\\AvtoTest\\uzlotin.json";
         return path;
     }
 }   

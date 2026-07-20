@@ -18,21 +18,28 @@ public class TestController : Controller
         return View();
     }
 
-    public async Task<IActionResult> GetTests(byte ticketId, int testId = 0, string language = null)
+    public IActionResult GetTests(byte ticketId, int testId = 0, string language = null)
     {
         var ticket = new Ticket() { Id = ticketId };
 
         if (!string.IsNullOrEmpty(language))
         {
 
-            testService.ChangeLanguage(language);
+            AddCookies("language", language);
         }
+        else
+        {
+            language = GetCookies("language");
+        }
+
+        testService.ChangeLanguage(language);
+
         if (testId == 0)
         {
             testId = ticket.StartIndex;
         }
 
-        var tests = (await testService.ReadFromFile())
+        var tests = testService.ReadFromFile()
             .Where(t => t.Id >= ticket.StartIndex && t.Id <= ticket.EndIndex)
             .ToList();
 
@@ -51,7 +58,7 @@ public class TestController : Controller
         int count = GetCorrectAnswersCount();
 
         var ticket = new Ticket() { Id = ticketId };
-        var test = (await testService.ReadFromFile()).Find(t => t.Id == testId);
+        var test = testService.ReadFromFile().Find(t => t.Id == testId);
         if (test.Choices[choiceId].Answer)
         {
             count++;
@@ -88,6 +95,7 @@ public class TestController : Controller
 
         var ticket = new Ticket { Id = ticketId };
         DeleteCookies(ticket);
+        DeleteCookies("language");
         return View();
     }
 
@@ -99,6 +107,14 @@ public class TestController : Controller
             HttpContext.Response.Cookies.Delete(key);
         }
         HttpContext.Response.Cookies.Append(key, value);
+    }
+
+    private string GetCookies(string key)
+    {
+        string value = HttpContext.Request.Cookies[key]!;
+        if (string.IsNullOrEmpty(value))
+            return string.Empty;
+        return value;
     }
 
     private void DeleteCookies(string key)
