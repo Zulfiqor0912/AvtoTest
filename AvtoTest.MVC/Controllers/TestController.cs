@@ -1,4 +1,5 @@
 ﻿using AvtoTest.Data.Entities.TestEntities;
+using AvtoTest.Service.Services;
 using AvtoTest.Service.Services.Interfece;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,10 +7,10 @@ namespace AvtoTest.MVC.Controllers;
 
 public class TestController : Controller
 {
-    private readonly ITestService testService;
+    private readonly TestService testService;
     private const string CorrectAnswersCount = "CorrectAnswersCount";
 
-    public TestController(ITestService testService)
+    public TestController(TestService testService)
     {
         this.testService = testService;
     }
@@ -17,19 +18,17 @@ public class TestController : Controller
     {
         return View();
     }
-
     public IActionResult GetTests(byte ticketId, int testId = 0, string language = null)
     {
         var ticket = new Ticket() { Id = ticketId };
 
         if (!string.IsNullOrEmpty(language))
         {
-
             AddCookies("language", language);
         }
         else
         {
-            language = GetCookies("language");
+            language = GetCookie("language");
         }
 
         testService.ChangeLanguage(language);
@@ -39,7 +38,7 @@ public class TestController : Controller
             testId = ticket.StartIndex;
         }
 
-        var tests = testService.ReadFromFile()
+        var tests = testService.Tests
             .Where(t => t.Id >= ticket.StartIndex && t.Id <= ticket.EndIndex)
             .ToList();
 
@@ -109,7 +108,7 @@ public class TestController : Controller
         HttpContext.Response.Cookies.Append(key, value);
     }
 
-    private string GetCookies(string key)
+    private string GetCookie(string key)
     {
         string value = HttpContext.Request.Cookies[key]!;
         if (string.IsNullOrEmpty(value))

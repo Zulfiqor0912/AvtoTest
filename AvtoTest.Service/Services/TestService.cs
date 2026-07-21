@@ -9,7 +9,7 @@ namespace AvtoTest.Service.Services;
 
 public class TestService : ITestService
 {
-    private readonly ITestRepository testRepository;
+    private  readonly ITestRepository testRepository;
     public List<Test> Tests { get; set; }
     public TestService(ITestRepository testRepository)
     {
