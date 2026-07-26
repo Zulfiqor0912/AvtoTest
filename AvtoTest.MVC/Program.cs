@@ -16,7 +16,7 @@ builder.Services.AddScoped<ITestRepository, TestRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<TestService>();
 
-builder.Services.AddDbContext<AddDbContext>( options => 
+builder.Services.AddDbContext<AppDbContext>( options => 
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
@@ -26,7 +26,7 @@ builder.Services.AddIdentity<CustomUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = false;
     options.SignIn.RequireConfirmedEmail = false;
 })
-    .AddEntityFrameworkStores<AddDbContext>()
+    .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
     
 

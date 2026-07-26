@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AvtoTest.Data.Context;
 
-public class AddDbContext : IdentityDbContext<CustomUser>
+public class AppDbContext : IdentityDbContext<CustomUser>
 {
-    public AddDbContext(DbContextOptions<AddDbContext> options) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
         
     }
