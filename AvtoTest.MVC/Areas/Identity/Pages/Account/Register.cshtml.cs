@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using AvtoTest.Data.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -22,26 +23,23 @@ namespace AvtoTest.MVC.Areas.Identity.Pages.Account;
 
 public class RegisterModel : PageModel
 {
-    private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly IUserStore<IdentityUser> _userStore;
-    private readonly IUserEmailStore<IdentityUser> _emailStore;
+    private readonly SignInManager<CustomUser> _signInManager;
+    private readonly UserManager<CustomUser> _userManager;
+    private readonly IUserStore<CustomUser> _userStore;
+    private readonly IUserEmailStore<CustomUser> _emailStore;
     private readonly ILogger<RegisterModel> _logger;
-    private readonly IEmailSender _emailSender;
 
     public RegisterModel(
-        UserManager<IdentityUser> userManager,
-        IUserStore<IdentityUser> userStore,
-        SignInManager<IdentityUser> signInManager,
-        ILogger<RegisterModel> logger,
-        IEmailSender emailSender)
+        UserManager<CustomUser> userManager,
+        IUserStore<CustomUser> userStore,
+        SignInManager<CustomUser> signInManager,
+        ILogger<RegisterModel> logger)
     {
         _userManager = userManager;
         _userStore = userStore;
         _emailStore = GetEmailStore();
         _signInManager = signInManager;
         _logger = logger;
-        _emailSender = emailSender;
     }
 
     /// <summary>
@@ -130,8 +128,6 @@ public class RegisterModel : PageModel
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                     protocol: Request.Scheme)!;
 
-                await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                 if (_userManager.Options.SignIn.RequireConfirmedAccount)
                 {
@@ -153,11 +149,11 @@ public class RegisterModel : PageModel
         return Page();
     }
 
-    private IdentityUser CreateUser()
+    private CustomUser CreateUser()
     {
         try
         {
-            return Activator.CreateInstance<IdentityUser>();
+            return Activator.CreateInstance<CustomUser>();
         }
         catch
         {
@@ -167,12 +163,12 @@ public class RegisterModel : PageModel
         }
     }
 
-    private IUserEmailStore<IdentityUser> GetEmailStore()
+    private IUserEmailStore<CustomUser> GetEmailStore()
     {
         if (!_userManager.SupportsUserEmail)
         {
             throw new NotSupportedException("The default UI requires a user store with email support.");
         }
-        return (IUserEmailStore<IdentityUser>)_userStore;
+        return (IUserEmailStore<CustomUser>)_userStore;
     }
 }
