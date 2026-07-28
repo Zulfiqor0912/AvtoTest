@@ -1,6 +1,7 @@
 ﻿using AvtoTest.Data.Entities.TestEntities;
 using AvtoTest.Service.Services;
 using AvtoTest.Service.Services.Interfece;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AvtoTest.MVC.Controllers;
@@ -18,6 +19,7 @@ public class TestController : Controller
     {
         return View();
     }
+    [Authorize]
     public IActionResult GetTests(byte ticketId, int testId = 0, string language = null)
     {
         var ticket = new Ticket() { Id = ticketId };
@@ -87,6 +89,7 @@ public class TestController : Controller
         return RedirectToAction("GetTests", new { ticketId = id, testId = 0 });
     }
 
+    [Authorize]
     public IActionResult TestResult(byte ticketId)
     {
         var correctAnswerCount = GetCorrectAnswersCount();
