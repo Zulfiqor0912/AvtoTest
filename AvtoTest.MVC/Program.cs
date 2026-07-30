@@ -23,7 +23,7 @@ builder.Services.AddDbContext<AppDbContext>( options =>
 
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<CustomUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
     options.SignIn.RequireConfirmedEmail = false;
@@ -69,7 +69,7 @@ using (var scopeService = app.Services.CreateScope())
         await roleManager.CreateAsync(roleModel);
     }
 
-    var userManager = scopeService.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var userManager = scopeService.ServiceProvider.GetRequiredService<UserManager<CustomUser>>();
 
     var email = "admin@admin.com";
     var password = "Jav#12";
