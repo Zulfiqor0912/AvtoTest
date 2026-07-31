@@ -12,6 +12,9 @@ public class AppDbContext : IdentityDbContext<CustomUser>
         
     }
 
+    public DbSet<CustomUser> CustomUsers { get; set; }
+    public DbSet<Result> Results { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

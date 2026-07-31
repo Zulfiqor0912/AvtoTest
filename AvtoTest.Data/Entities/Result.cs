@@ -13,7 +13,7 @@ public class Result
     public byte CorrectAnswerCount { get; set; }
     public byte IncorrectAnswerCount => (byte) (TotalAnswersCount - CorrectAnswerCount);
     public const byte TotalAnswersCount = 20;
-    public Guid UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
     public CustomUser? CustomUser { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 }
