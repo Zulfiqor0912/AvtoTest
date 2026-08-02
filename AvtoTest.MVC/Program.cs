@@ -15,6 +15,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ITestRepository, TestRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<TestService>();
+builder.Services.AddMemoryCache();
 
 builder.Services.AddDbContext<AppDbContext>( options => 
 {
