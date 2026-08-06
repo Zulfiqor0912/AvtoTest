@@ -16,6 +16,8 @@ builder.Services.AddScoped<ITestRepository, TestRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<TestService>();
 builder.Services.AddMemoryCache();
+builder.Services.AddScoped<IResultRepository, ResultRepository>();
+
 
 builder.Services.AddDbContext<AppDbContext>( options => 
 {

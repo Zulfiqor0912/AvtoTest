@@ -1,4 +1,5 @@
 ﻿using AvtoTest.Data.Entities.TestEntities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +12,5 @@ public interface ITestService
 
     public string GetPath();
 
-    public void ChangeLanguage(string language);
+    public void ChangeLanguage(string language, HttpContext httpContext);
 }
