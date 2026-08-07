@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AvtoTest.MVC.Controllers;
 
+[Authorize]
 public class TestController : Controller
 {
     private readonly TestService _testService;
@@ -74,6 +75,7 @@ public class TestController : Controller
     {
         return View(result);
     }
+    [Authorize]
     public IActionResult Tickets()
     {
         var tickets = new List<Ticket>();

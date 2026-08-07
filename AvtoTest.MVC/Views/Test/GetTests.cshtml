@@ -2,205 +2,229 @@
 @model AvtoTest.Data.Entities.TestEntities.Test
 
 @{
-}
-
-@{
     byte ticketId = Convert.ToByte(ViewBag.TicketId);
     HttpContext httpContext = (HttpContext)ViewBag.Context;
     Ticket ticket = ViewBag.Ticket;
     var test = Model;
-
     List<Test> tests = ViewBag.Tests;
 }
 
-<div class="container">
+<link rel="stylesheet" href="~/css/test.css" asp-append-version="true" />
 
-    <div class="languages">
-        <a class="btn btn-primary" asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@test.Id" asp-route-language="rus">Rus</a>
-        <a class="btn btn-primary" asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@test.Id" asp-route-language="kiril">Kiril</a>
-        <a class="btn btn-primary" asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@test.Id" asp-route-language="uzb">Uzbek</a>
+<div class="test-container">
+    <!-- HEADER -->
+    <div class="test-header">
+        <div class="header-left">
+            <h1 class="test-title">🚗 Avtotest</h1>
+            <div class="ticket-info">
+                <span class="ticket-badge">🎫 Chipta #@ticketId</span>
+                <span class="question-counter">📝 @(test.Id - ticket.StartIndex + 1) / @(ticket.EndIndex - ticket.StartIndex + 1)</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="timer" id="timer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span id="timeDisplay">20:00</span>
+            </div>
+        </div>
     </div>
 
-    <div class="paginition_part">
+    <!-- PROGRESS BAR -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar" style="width: @((test.Id - ticket.StartIndex + 1) * 100 / (ticket.EndIndex - ticket.StartIndex + 1))%"></div>
+    </div>
 
-        <a type="submit" class="finish_test_button btn btn-primary" asp-route-ticketId="@ticketId" asp-action="TestResult">
-            testni yakunlash
-        </a>
-
-        <div class="paginition">
-
-            <!-- content in this Section -->
-            <!--
-            <div class="content">
-                <h3>Interview Experiences:</h3>
-                <article>
-                    Share Your Questions/Experience or share
-                    your "Interview Experience", please mail
-                    your interview experience to
-                    review-team@geeksforgeeks.org. Also, to
-                    share interview questions, please add
-                    questions at Contribute a Question! You
-                    can also find company specific Interview
-                    Questions at our PRACTICE portal !
-                </article>
+    <!-- MAIN CONTENT -->
+    <div class="test-main">
+        <!-- LEFT: QUESTION -->
+        <div class="question-section">
+            <div class="question-header">
+                <span class="question-number">Savol @(test.Id - ticket.StartIndex + 1)</span>
+                <div class="language-selector">
+                    <a class="lang-btn @(ViewBag.Language == "rus" ? "active" : "")"
+                       asp-action="GetTests"
+                       asp-route-ticketId="@ticketId"
+                       asp-route-testId="@test.Id"
+                       asp-route-language="rus">🇷🇺 Rus</a>
+                    <a class="lang-btn @(ViewBag.Language == "kiril" ? "active" : "")"
+                       asp-action="GetTests"
+                       asp-route-ticketId="@ticketId"
+                       asp-route-testId="@test.Id"
+                       asp-route-language="kiril">🇺🇿 Kiril</a>
+                    <a class="lang-btn @(ViewBag.Language == "uzb" ? "active" : "")"
+                       asp-action="GetTests"
+                       asp-route-ticketId="@ticketId"
+                       asp-route-testId="@test.Id"
+                       asp-route-language="uzb">🇺🇿 Uzbek</a>
+                </div>
             </div>
-            -->
-            <!-- pagination elements -->
-            <div class="pagination_section">
+
+            <div class="question-content">
+                <p class="question-text">@test.Question</p>
+            </div>
+
+            <!-- IMAGE -->
+            @if (test.Media != null && test.Media.Exist)
+            {
+                var path = $"{test.Media.Name}.png";
+                <div class="question-image">
+                    <img src="~/AvtoTest/@path" alt="Test rasmi" />
+                </div>
+            }
+        </div>
+
+        <!-- RIGHT: CHOICES -->
+        <div class="choices-section">
+            <h3 class="choices-title">⬇️ Javob variantlari</h3>
+
+            <form asp-action="GetTestsPost" method="post" class="choices-form">
                 @{
-                    int previousId;
-                    int nextId;
-
-                    if (test.Id == ticket.StartIndex)
-                    {
-                        previousId = test.Id;
-                    }
-                    else
-                    {
-                        previousId = test.Id - 1;    
-                    }
-
-                    if (test.Id == ticket.EndIndex)
-                    {
-                        nextId = test.Id;
-                    }
-                    else
-                    {
-                        nextId = test.Id + 1;
-                    }
+                    int row = 0;
+                    string choiceId = httpContext.Request.Cookies[test.Id.ToString()]!;
+                    bool isAnswered = !string.IsNullOrEmpty(choiceId);
                 }
-                <a asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@previousId">Previous</a>
 
-                @for (int i = ticket.StartIndex; i <= ticket.EndIndex; i++)
+                @foreach (var choice in test.Choices)
                 {
-                    string choiceId = httpContext.Request.Cookies[i.ToString()]!;
+                    string letter = ((char)(65 + row)).ToString();
+                    bool isSelected = isAnswered && Convert.ToInt32(choiceId) == row;
+                    bool isCorrect = choice.Answer;
 
-                    if (!string.IsNullOrEmpty(choiceId))
-                    {
-                        int selectedId = Convert.ToInt32(choiceId);
-                        var selectedTest = tests.Find(t => t.Id == i);
-                        var answer = selectedTest.Choices[selectedId].Answer;
-                        if (answer)
+                    <button type="submit"
+                            class="choice-btn @(isSelected ? (isCorrect ? "correct" : "wrong") : "") @(isAnswered && isCorrect && !isSelected ? "show-correct" : "")"
+                            asp-route-ticketId="@ticketId"
+                            asp-route-testId="@test.Id"
+                            asp-route-choiceId="@row"
+                            asp-action="GetTestsPost"
+                            disabled="@isAnswered">
+                        <span class="choice-letter">@letter</span>
+                        <span class="choice-text">@choice.Text</span>
+                        @if (isSelected)
                         {
-                            <a class="correctAnswer" asp-action="GetTests" asp-route-ticketId="@ticket.Id" asp-route-testId="@i">@i</a>
-                        }
-                        else
-                        {
-                            <a class="incorrectAnswer" asp-action="GetTests" asp-route-ticketId="@ticket.Id" asp-route-testId="@i">@i</a>
-                        }
-                    }
-                    else
-                    {
-                        if (test.Id == i)
-                        {
-                            <a class="active" asp-action="GetTests" asp-route-ticketId="@ticket.Id" asp-route-testId="@i">@i</a>
-                        }
-                        else
-                        {
-                            <a asp-action="GetTests" asp-route-ticketId="@ticket.Id" asp-route-testId="@i">@i</a>
-                        }
-                    }
-                }
-
-                <a asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@nextId">Next</a>
-            </div>
-
-        </div>
-
-        <div class="timer">
-            <div id="app"></div>
-        </div>
-
-    </div>
-
-    <div class="question_part">
-
-        <p>@test.Question</p>
-
-        <div class="line"></div>
-
-        <div class="variants_part">
-
-            <div class="image_part">
-
-                @if (test.Media.Exist)
-                {
-                    var path = $"{test.Media.Name}.png";
-                    <img src="~/AvtoTest/@path"
-                         alt="" />
-                }
-                else
-                {
-                    <img src="~/DefaultImg.jpg" alt="" />
-                }
-                
-            </div>
-
-            <div class="variant">
-
-                <form asp-action="GetTestsPost" method="post">
-
-                    @{
-                        int row = 0;
-                    }
-
-                    @foreach (var choice in test.Choices)
-                    {
-                        string choiceId = httpContext.Request.Cookies[test.Id.ToString()]!;
-
-                        if (!string.IsNullOrEmpty(choiceId))
-                        {
-                            int selectedId = Convert.ToInt32(choiceId);
-
-                            if (row == selectedId)
-                            {
-                                if (choice.Answer)
+                            <span class="choice-icon">
+                                @if (isCorrect)
                                 {
-                                    <button disabled class="btn btn-success" type="submit">
-                                        @choice.Text
-                                    </button>
-                                    <br />
+                                    <span>✅</span>
                                 }
                                 else
                                 {
-                                    <button disabled class="btn btn-danger" type="submit">
-                                        @choice.Text
-                                    </button>
-                                    <br />
+                                    <span>❌</span>
                                 }
-                            }
-                            else
-                            {
-                                <button disabled class="btn" type="submit">
-                                    @choice.Text
-                                </button>
-                                <br />
-                            }
+                            </span>
                         }
-                        else
+                        @if (isAnswered && isCorrect && !isSelected)
                         {
-                            <button asp-route-ticketId="@ticketId"
-                                    asp-route-testId="@test.Id"
-                                    asp-route-choiceId="@row"
-                                    asp-action="GetTestsPost"
-                                    class="btn btn-primary"
-                                    type="submit">
-                                @choice.Text
-                            </button>
-                            <br />
+                            <span class="choice-icon">✅</span>
                         }
+                    </button>
 
-                        <br />
+                    row++;
+                }
+            </form>
 
-                        row++;
-                    }
+            <!-- NAVIGATION BUTTONS -->
+            <div class="nav-buttons">
+                @{
+                    int previousId = test.Id == ticket.StartIndex ? test.Id : test.Id - 1;
+                    int nextId = test.Id == ticket.EndIndex ? test.Id : test.Id + 1;
+                }
 
-                </form>
+                <a class="nav-btn prev" asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@previousId">
+                    ← Oldingi
+                </a>
 
+                <a class="nav-btn finish" asp-route-ticketId="@ticketId" asp-action="TestResult" onclick="finishTest()">
+                    🏁 Testni yakunlash
+                </a>
+
+                <a class="nav-btn next" asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@nextId">
+                    Keyingi →
+                </a>
             </div>
-
         </div>
-
     </div>
 
+    <!-- PAGINATION -->
+    <div class="pagination-section">
+        <div class="pagination-wrapper">
+            <a class="page-nav" asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@previousId">
+                ◀
+            </a>
+
+            @for (int i = ticket.StartIndex; i <= ticket.EndIndex; i++)
+            {
+                string choiceIdForPage = httpContext.Request.Cookies[i.ToString()]!;
+                string pageClass = "page-link";
+
+                if (test.Id == i)
+                {
+                    pageClass += " active";
+                }
+                else if (!string.IsNullOrEmpty(choiceIdForPage))
+                {
+                    try
+                    {
+                        int selectedId = Convert.ToInt32(choiceIdForPage);
+                        var selectedTest = tests.FirstOrDefault(t => t.Id == i);
+                        if (selectedTest != null && selectedTest.Choices != null && selectedTest.Choices.Count > selectedId)
+                        {
+                            var answer = selectedTest.Choices[selectedId].Answer;
+                            pageClass += answer ? " correct" : " wrong";
+                        }
+                    }
+                    catch
+                    {
+                        // Agar xatolik bo'lsa, hech narsa qilmaymiz
+                    }
+                }
+
+                <a class="@pageClass" asp-action="GetTests" asp-route-ticketId="@ticket.Id" asp-route-testId="@i">
+                    @i
+                </a>
+            }
+
+            <a class="page-nav" asp-action="GetTests" asp-route-ticketId="@ticketId" asp-route-testId="@nextId">
+                ▶
+            </a>
+        </div>
+
+        <div class="pagination-stats">
+            <span class="stat-correct">✅ To'g'ri: <span id="correctCount">0</span></span>
+            <span class="stat-wrong">❌ Noto'g'ri: <span id="wrongCount">0</span></span>
+            <span class="stat-empty">⬜ Javobsiz: <span id="emptyCount">0</span></span>
+        </div>
+    </div>
 </div>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+    // Pass ticketId from server to JavaScript
+    var ticketId = '@ticketId';
+</script>
+<script src="~/js/test.js" asp-append-version="true"></script>
+
+<!-- Sahifa yuklangandan keyin statistikani yangilaymiz -->
+<script>
+    // Sahifa to'liq yuklangandan keyin
+    document.addEventListener('DOMContentLoaded', function () {
+        // Statistikani hisoblaymiz
+        if (typeof updateStats === 'function') {
+            setTimeout(updateStats, 300);
+        }
+
+        // Har bir javob tanlanganda statistikani yangilaymiz
+        const choiceBtns = document.querySelectorAll('.choice-btn');
+        choiceBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                setTimeout(function () {
+                    if (typeof updateStats === 'function') {
+                        updateStats();
+                    }
+                }, 500);
+            });
+        });
+    });
+</script>

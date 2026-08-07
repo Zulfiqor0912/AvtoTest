@@ -1,0 +1,657 @@
+﻿/* ============================================
+   GLOBAL & PAGE
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.tickets-page {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(145deg, #f0f4f8 0%, #dce6f0 100%);
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.page-header {
+    text-align: center;
+    margin-bottom: 48px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 30px 20px;
+    border-radius: 24px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+}
+
+.header-badge {
+    font-size: 48px;
+    margin-bottom: 4px;
+}
+
+.page-title {
+    font-size: 42px;
+    font-weight: 800;
+    color: #1a2634;
+    margin-bottom: 4px;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #1e3c5c, #2a5f8f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+}
+
+.page-subtitle {
+    color: #5b6f82;
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    margin-bottom: 12px;
+}
+
+.header-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.stat-item {
+    font-size: 14px;
+    color: #3d556a;
+    background: rgba(42, 95, 143, 0.08);
+    padding: 4px 16px;
+    border-radius: 100px;
+    font-weight: 500;
+}
+
+/* ============================================
+   GRID
+   ============================================ */
+.tickets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   FLIP CARD
+   ============================================ */
+.flip-card {
+    background-color: transparent;
+    width: 100%;
+    max-width: 340px;
+    height: 420px;
+    perspective: 1200px;
+    margin: 0 auto;
+    cursor: pointer;
+    animation: fadeUp 0.6s ease backwards;
+}
+
+    /* Animation delays */
+    .flip-card:nth-child(1) {
+        animation-delay: 0.02s;
+    }
+
+    .flip-card:nth-child(2) {
+        animation-delay: 0.04s;
+    }
+
+    .flip-card:nth-child(3) {
+        animation-delay: 0.06s;
+    }
+
+    .flip-card:nth-child(4) {
+        animation-delay: 0.08s;
+    }
+
+    .flip-card:nth-child(5) {
+        animation-delay: 0.10s;
+    }
+
+    .flip-card:nth-child(6) {
+        animation-delay: 0.12s;
+    }
+
+    .flip-card:nth-child(7) {
+        animation-delay: 0.14s;
+    }
+
+    .flip-card:nth-child(8) {
+        animation-delay: 0.16s;
+    }
+
+    .flip-card:nth-child(9) {
+        animation-delay: 0.18s;
+    }
+
+    .flip-card:nth-child(10) {
+        animation-delay: 0.20s;
+    }
+
+    .flip-card:nth-child(11) {
+        animation-delay: 0.22s;
+    }
+
+    .flip-card:nth-child(12) {
+        animation-delay: 0.24s;
+    }
+
+    .flip-card:nth-child(13) {
+        animation-delay: 0.26s;
+    }
+
+    .flip-card:nth-child(14) {
+        animation-delay: 0.28s;
+    }
+
+    .flip-card:nth-child(15) {
+        animation-delay: 0.30s;
+    }
+
+    .flip-card:nth-child(16) {
+        animation-delay: 0.32s;
+    }
+
+    .flip-card:nth-child(17) {
+        animation-delay: 0.34s;
+    }
+
+    .flip-card:nth-child(18) {
+        animation-delay: 0.36s;
+    }
+
+    .flip-card:nth-child(19) {
+        animation-delay: 0.38s;
+    }
+
+    .flip-card:nth-child(20) {
+        animation-delay: 0.40s;
+    }
+
+    .flip-card:nth-child(21) {
+        animation-delay: 0.42s;
+    }
+
+    .flip-card:nth-child(22) {
+        animation-delay: 0.44s;
+    }
+
+    .flip-card:nth-child(23) {
+        animation-delay: 0.46s;
+    }
+
+    .flip-card:nth-child(24) {
+        animation-delay: 0.48s;
+    }
+
+    .flip-card:nth-child(25) {
+        animation-delay: 0.50s;
+    }
+
+    .flip-card:nth-child(26) {
+        animation-delay: 0.52s;
+    }
+
+    .flip-card:nth-child(27) {
+        animation-delay: 0.54s;
+    }
+
+    .flip-card:nth-child(28) {
+        animation-delay: 0.56s;
+    }
+
+    .flip-card:nth-child(29) {
+        animation-delay: 0.58s;
+    }
+
+    .flip-card:nth-child(30) {
+        animation-delay: 0.60s;
+    }
+
+    .flip-card:nth-child(31) {
+        animation-delay: 0.62s;
+    }
+
+    .flip-card:nth-child(32) {
+        animation-delay: 0.64s;
+    }
+
+    .flip-card:nth-child(33) {
+        animation-delay: 0.66s;
+    }
+
+    .flip-card:nth-child(34) {
+        animation-delay: 0.68s;
+    }
+
+    .flip-card:nth-child(35) {
+        animation-delay: 0.70s;
+    }
+
+@keyframes fadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ============================================
+   FLIP CARD INNER
+   ============================================ */
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    transform-style: preserve-3d;
+    border-radius: 24px;
+    box-shadow: 0 12px 40px rgba(0, 20, 40, 0.08);
+}
+
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg) scale(1.02);
+    box-shadow: 0 24px 60px rgba(0, 20, 40, 0.18);
+}
+
+/* ============================================
+   FLIP CARD FRONT / BACK
+   ============================================ */
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    overflow: hidden;
+}
+
+/* --- FRONT --- */
+.flip-card-front {
+    background: #ffffff;
+    color: #1a2634;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(4px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.card-header-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 2;
+}
+
+.badge-number {
+    background: rgba(30, 60, 92, 0.9);
+    backdrop-filter: blur(8px);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+}
+
+.badge-type {
+    background: rgba(42, 95, 143, 0.85);
+    backdrop-filter: blur(8px);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 12px;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.flip-card-front img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.flip-card:hover .flip-card-front img {
+    transform: scale(1.05);
+}
+
+.card-content {
+    padding: 14px 20px 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
+    height: calc(100% - 200px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+    .card-content .ticket-badge {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #2a5f8f;
+        background: rgba(42, 95, 143, 0.10);
+        padding: 4px 16px;
+        border-radius: 100px;
+        letter-spacing: 0.4px;
+        margin-bottom: 4px;
+        align-self: center;
+    }
+
+    .card-content h4 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #0b1a2a;
+        letter-spacing: -0.3px;
+    }
+
+    .card-content .ticket-info {
+        margin-top: 6px;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        font-size: 13px;
+        color: #7a8fa3;
+        letter-spacing: 0.2px;
+    }
+
+.ticket-difficulty {
+    display: flex;
+    align-items: center;
+}
+
+    .ticket-difficulty .easy {
+        color: #2e7d32;
+    }
+
+    .ticket-difficulty .medium {
+        color: #f9a825;
+    }
+
+    .ticket-difficulty .hard {
+        color: #c62828;
+    }
+
+.ticket-time {
+    display: flex;
+    align-items: center;
+}
+
+/* --- BACK --- */
+.flip-card-back {
+    background: linear-gradient(145deg, #1e3c5c, #0f2640);
+    color: white;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+    .flip-card-back .back-icon {
+        font-size: 48px;
+        margin-bottom: 6px;
+        opacity: 0.9;
+    }
+
+    .flip-card-back h3 {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .flip-card-back .ticket-number {
+        font-size: 14px;
+        font-weight: 500;
+        opacity: 0.8;
+        margin-bottom: 12px;
+        letter-spacing: 0.5px;
+    }
+
+    .flip-card-back .ticket-details {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        font-size: 14px;
+        opacity: 0.85;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.06);
+        padding: 12px 20px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 200px;
+    }
+
+        .flip-card-back .ticket-details span {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+        }
+
+    /* ============================================
+   BUTTON
+   ============================================ */
+    .flip-card-back .btn-go {
+        background: linear-gradient(135deg, #2a5f8f, #1e3c5c);
+        border: none;
+        color: #ffffff;
+        padding: 14px 36px;
+        border-radius: 60px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 0.3px;
+        text-decoration: none;
+        display: inline-block;
+        font-family: inherit;
+        box-shadow: 0 4px 16px rgba(42, 95, 143, 0.3);
+    }
+
+        .flip-card-back .btn-go:hover {
+            background: linear-gradient(135deg, #3475b0, #254e78);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 28px rgba(42, 95, 143, 0.4);
+        }
+
+        .flip-card-back .btn-go:active {
+            transform: scale(0.96);
+        }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .tickets-page {
+        padding: 20px 12px;
+    }
+
+    .page-header {
+        padding: 20px 16px;
+        margin-bottom: 28px;
+    }
+
+    .page-title {
+        font-size: 28px;
+    }
+
+    .page-subtitle {
+        font-size: 14px;
+    }
+
+    .header-stats {
+        gap: 10px;
+    }
+
+    .stat-item {
+        font-size: 12px;
+        padding: 3px 12px;
+    }
+
+    .tickets-grid {
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .flip-card {
+        height: 380px;
+        max-width: 300px;
+    }
+
+    .flip-card-front img {
+        height: 160px;
+    }
+
+    .card-content {
+        height: calc(100% - 160px);
+        padding: 12px 16px;
+    }
+
+        .card-content h4 {
+            font-size: 19px;
+        }
+
+    .flip-card-back h3 {
+        font-size: 22px;
+    }
+
+    .flip-card-back .btn-go {
+        padding: 12px 28px;
+        font-size: 14px;
+    }
+
+    .card-header-badge {
+        top: 8px;
+        left: 8px;
+    }
+
+    .badge-number {
+        font-size: 12px;
+        padding: 3px 12px;
+    }
+
+    .badge-type {
+        font-size: 10px;
+        padding: 2px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tickets-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .flip-card {
+        max-width: 100%;
+        height: 360px;
+    }
+
+    .flip-card-front img {
+        height: 150px;
+    }
+
+    .card-content {
+        height: calc(100% - 150px);
+        padding: 10px 14px;
+    }
+
+        .card-content h4 {
+            font-size: 17px;
+        }
+
+        .card-content .ticket-info {
+            font-size: 12px;
+            gap: 12px;
+        }
+
+    .flip-card-back {
+        padding: 20px 16px;
+    }
+
+        .flip-card-back .back-icon {
+            font-size: 36px;
+        }
+
+        .flip-card-back h3 {
+            font-size: 20px;
+        }
+
+        .flip-card-back .btn-go {
+            padding: 10px 24px;
+            font-size: 13px;
+        }
+
+        .flip-card-back .ticket-details {
+            max-width: 100%;
+            font-size: 13px;
+            padding: 10px 14px;
+        }
+
+    .page-title {
+        font-size: 24px;
+    }
+
+    .header-badge {
+        font-size: 36px;
+    }
+
+    .header-stats {
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY: Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .flip-card {
+        animation: none;
+    }
+
+        .flip-card-inner,
+        .flip-card:hover .flip-card-inner,
+        .flip-card-front img,
+        .flip-card:hover .flip-card-front img,
+        .flip-card-back .btn-go {
+            transition: none !important;
+            transform: none !important;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg) !important;
+            box-shadow: 0 12px 40px rgba(0, 20, 40, 0.08);
+        }
+
+    .flip-card-back .btn-go:hover {
+        transform: none;
+        box-shadow: 0 4px 16px rgba(42, 95, 143, 0.3);
+    }
+}

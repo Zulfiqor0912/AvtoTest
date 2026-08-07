@@ -34,6 +34,13 @@ builder.Services.AddIdentity<CustomUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";
+    options.LogoutPath = "/Identity/Account/Logout";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -54,11 +61,11 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
-app.MapGet("/", context =>
-{
-    context.Response.Redirect("/Identity/Account/Login");
-    return Task.CompletedTask;
-});
+//app.MapGet("/", context =>
+//{
+//    context.Response.Redirect("/Identity/Account/Login");
+//    return Task.CompletedTask;
+//});
 
 app.MapRazorPages();
 
@@ -93,7 +100,7 @@ using (var scopeService = app.Services.CreateScope())
             UserName = email
         };
 
-        await userManager.CreateAsync(user);
+        await userManager.CreateAsync(user, password);
 
         await userManager.AddToRoleAsync(user, role);
     }
