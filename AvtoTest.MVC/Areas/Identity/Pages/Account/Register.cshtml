@@ -1,64 +1,127 @@
 @page
 @model RegisterModel
+
 @{
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<!-- Google Font - Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-<div class="row">
-    <div class="col-md-4">
+<!-- CSS faylni ulash -->
+<link rel="stylesheet" href="~/css/register.css" />
+
+<!-- ======================================== -->
+<!-- REGISTER WRAPPER - FULL SCREEN -->
+<!-- ======================================== -->
+<div class="register-wrapper">
+    <!-- LEFT PANEL - BRANDING -->
+    <div class="brand-panel">
+        <div class="brand-header">
+            <div class="logo-icon">AT</div>
+            <div class="logo-text">AvtoTest<span>.MVC</span></div>
+        </div>
+
+        <div class="brand-content">
+            <div class="badge">✦ Join us</div>
+            <h1>Create your<br />account today</h1>
+            <p>Start managing your tasks and boost your productivity with AvtoTest.</p>
+            <div class="brand-features">
+                <div class="feature">
+                    <span class="check">✓</span> Free forever
+                </div>
+                <div class="feature">
+                    <span class="check">✓</span> Secure & reliable
+                </div>
+                <div class="feature">
+                    <span class="check">✓</span> 24/7 support
+                </div>
+            </div>
+        </div>
+
+        <div class="brand-footer">
+            © 2026 AvtoTest.MVC — All rights reserved
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL - FORM -->
+    <div class="form-panel">
+        <div class="form-header">
+            <h2>Get started</h2>
+            <p>Fill in the details below to create your account</p>
+        </div>
+
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
+            <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+
+            <!-- Email -->
+            <div class="form-floating">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder=" " />
+                <label asp-for="Input.Email">Email address</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+
+            <!-- Password -->
+            <div class="form-floating">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder=" " />
                 <label asp-for="Input.Password">Password</label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <span class="password-hint">Must be at least 6 characters</span>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+
+            <!-- Confirm Password -->
+            <div class="form-floating">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder=" " />
+                <label asp-for="Input.ConfirmPassword">Confirm password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+
+            <!-- Register Button -->
+            <button id="registerSubmit" type="submit" class="btn-register">Create account</button>
+
+            <!-- Auth Links -->
+            <div class="auth-links">
+                <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">
+                    <span class="icon">🔑</span> Already have an account? <strong>Log in</strong>
+                </a>
+                <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">
+                    <span class="icon">📧</span> Resend email confirmation
+                </a>
+            </div>
         </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
+
+        <!-- Divider -->
+        <div class="divider">
+            <span>Or continue with</span>
+        </div>
+
+        <!-- External Logins -->
+        <div>
+            @if ((Model.ExternalLogins?.Count ?? 0) == 0)
+            {
+                <div class="no-external">
+                    No external authentication services configured.
+                    <a href="https://go.microsoft.com/fwlink/?LinkID=532715">Learn more</a>
+                </div>
             }
-        </section>
+            else
+            {
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div class="external-providers">
+                        @foreach (var provider in Model.ExternalLogins!)
+                        {
+                            <button type="submit" class="btn-external" name="provider" value="@provider.Name" title="Register using your @provider.DisplayName account">
+                                @provider.DisplayName
+                            </button>
+                        }
+                    </div>
+                </form>
+            }
+        </div>
+
+        <div class="register-footer">
+            &copy; 2026 AvtoTest.MVC — <a href="#">Privacy Policy</a>
+        </div>
     </div>
 </div>
 

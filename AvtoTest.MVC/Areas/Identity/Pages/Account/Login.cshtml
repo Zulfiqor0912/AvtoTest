@@ -5,76 +5,120 @@
     ViewData["Title"] = "Log in";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email" class="form-label">Email</label>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+<!-- Google Font - Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- CSS faylni ulash -->
+<link rel="stylesheet" href="~/css/login.css" />
+
+<!-- ======================================== -->
+<!-- LOGIN WRAPPER - FULL SCREEN -->
+<!-- ======================================== -->
+<div class="login-wrapper">
+    <!-- LEFT PANEL - BRANDING -->
+    <div class="brand-panel">
+        <div class="brand-header">
+            <div class="logo-icon">AT</div>
+            <div class="logo-text">AvtoTest<span>.MVC</span></div>
+        </div>
+
+        <div class="brand-content">
+            <div class="badge">✦ Welcome back</div>
+            <h1>Sign in to<br />your account</h1>
+            <p>Access your dashboard and manage your tasks efficiently.</p>
+            <div class="brand-features">
+                <div class="feature">
+                    <span class="check">✓</span> Secure & encrypted connection
                 </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password" class="form-label">Password</label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <div class="feature">
+                    <span class="check">✓</span> Fast & responsive interface
                 </div>
-                <div class="checkbox mb-3">
-                    <label asp-for="Input.RememberMe" class="form-label">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
+                <div class="feature">
+                    <span class="check">✓</span> Access anywhere, anytime
                 </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
-                </div>
-            </form>
-        </section>
+            </div>
+        </div>
+
+        <div class="brand-footer">
+            © 2026 AvtoTest.MVC — All rights reserved
+        </div>
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
+
+    <!-- RIGHT PANEL - FORM -->
+    <div class="form-panel">
+        <div class="form-header">
+            <h2>Log in</h2>
+            <p>Enter your credentials to access your account</p>
+        </div>
+
+        <form id="account" method="post">
+            <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+
+            <!-- Email -->
+            <div class="form-floating">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder=" " />
+                <label asp-for="Input.Email">Email address</label>
+                <span asp-validation-for="Input.Email" class="text-danger field-validation-error"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="form-floating">
+                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder=" " />
+                <label asp-for="Input.Password">Password</label>
+                <span asp-validation-for="Input.Password" class="text-danger field-validation-error"></span>
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="remember-me">
+                <div class="checkbox">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <label asp-for="Input.RememberMe">@Html.DisplayNameFor(m => m.Input.RememberMe)</label>
+                </div>
+                <a id="forgot-password" asp-page="./ForgotPassword" class="forgot-link">Forgot password?</a>
+            </div>
+
+            <!-- Login Button -->
+            <button id="login-submit" type="submit" class="btn-login">Log in</button>
+
+            <!-- Auth Links -->
+            <div class="auth-links">
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">
+                    <span class="icon">✨</span> Don't have an account? <strong>Register</strong>
+                </a>
+                <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">
+                    <span class="icon">📧</span> Resend email confirmation
+                </a>
+            </div>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider">
+            <span>Or continue with</span>
+        </div>
+
+        <!-- External Logins -->
+        <div>
+            @if ((Model.ExternalLogins?.Count ?? 0) == 0)
+            {
+                <div class="no-external">
+                    No external authentication services configured.
+                    <a href="https://go.microsoft.com/fwlink/?LinkID=532715">Learn more</a>
+                </div>
             }
-        </section>
+            else
+            {
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div class="external-providers">
+                        @foreach (var provider in Model.ExternalLogins!)
+                        {
+                            <button type="submit" class="btn-external" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                @provider.DisplayName
+                            </button>
+                        }
+                    </div>
+                </form>
+            }
+        </div>
     </div>
 </div>
 
