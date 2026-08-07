@@ -1,16 +1,80 @@
 ﻿@{
     int count = ViewBag.Count;
 }
-<h1 class="bold">Sizning natijangiz</h1>
-<h3>To'g'ri javoblar soni : @count/20</h3>
 
-@{
-    if (count >= 18)
-    {
-        <h4 style="color: green">Siz testdan muvaffaqiyatli o'tdingiz :)</h4>
-    }
-    else
-    {
-        <h4 style="color: red">Siz testdan o'tolmadingiz :)</h4>
-    }
-}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test natijasi</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <!-- Asosiy CSS fayl -->
+    <link rel="stylesheet" href="~/css/testResults.css" />
+</head>
+<body>
+
+    <div class="result-card">
+
+        <!-- Sarlavha -->
+        <div class="result-title">
+            <i class="fas fa-chart-simple"></i>
+            Sizning natijangiz
+        </div>
+        <div class="sub-headline">
+            <i class="fas fa-pencil-alt" style="margin-right: 6px; opacity:0.7;"></i>
+            20 ta savoldan @count tasiga to'g'ri javob berdingiz
+        </div>
+
+        <!-- Asosiy ball -->
+        <div class="score-wrapper">
+            <div class="score-number">
+                @count <span>/ 20</span>
+            </div>
+            <div class="score-badge">
+                <i class="far fa-circle-check"></i>
+                @((count / 20.0 * 100).ToString("0"))%
+            </div>
+        </div>
+
+        <!-- Holat -->
+        @{
+            bool passed = count >= 18;
+        }
+        <div class="status-box @(passed ? "success" : "fail")">
+            @if (passed)
+            {
+                <i class="fas fa-check-circle"></i>
+                <span>Siz testdan muvaffaqiyatli o'tdingiz 🎉</span>
+            }
+            else
+            {
+                <i class="fas fa-xmark-circle"></i>
+                <span>Siz testdan o'tolmadingiz 😔</span>
+            }
+        </div>
+
+        <!-- Tugmalar -->
+        <div class="actions">
+            <a class="btn-primary" asp-action="Tickets">
+                <i class="fas fa-home"></i>
+                Bosh sahifa
+            </a>
+            @* <a class="btn-secondary" asp-action="GetTests">
+                <i class="fas fa-rotate-right"></i>
+                Qayta ishlash
+            </a> *@
+        </div>
+
+    </div>
+
+</body>
+</html>

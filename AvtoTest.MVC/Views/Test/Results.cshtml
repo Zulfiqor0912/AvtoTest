@@ -1,25 +1,80 @@
 ﻿@model AvtoTest.Data.Entities.Result
 
-<h1>Siz oldin bu testni bajargan ekansiz: </h1>
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test natijasi</title>
 
-<h1 class="bold">Sizning natijangiz</h1>
-<h3>To'g'ri javoblar soni : @Model.CorrectAnswerCount/20</h3>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
 
-@{
-    if (Model.CorrectAnswerCount >= 18)
-    {
-        <h4 style="color: green">Siz testdan muvaffaqiyatli o'tdingiz :)</h4>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <!-- Asosiy CSS fayl -->
+  <link rel="stylesheet" href="~/css/results.css" />
+</head>
+<body>
+
+  <div class="result-card">
+
+    <!-- Oldin bajarilgan -->
+    <div class="alert-past">
+      <i class="fas fa-clock"></i>
+      <span>Siz oldin bu testni bajargan ekansiz</span>
+    </div>
+
+    <!-- Sarlavha -->
+    <div class="result-title">
+      <i class="fas fa-chart-simple"></i>
+      Sizning natijangiz
+    </div>
+    <div class="sub-headline">
+      <i class="fas fa-pencil-alt" style="margin-right: 6px; opacity:0.7;"></i>
+      20 ta savoldan @Model.CorrectAnswerCount tasiga to‘g‘ri javob berdingiz
+    </div>
+
+    <!-- Asosiy ball -->
+    <div class="score-wrapper">
+      <div class="score-number">
+        @Model.CorrectAnswerCount <span>/ 20</span>
+      </div>
+      <div class="score-badge">
+        <i class="far fa-circle-check"></i>
+        @((Model.CorrectAnswerCount / 20.0 * 100).ToString("0"))%
+      </div>
+    </div>
+
+    <!-- Holat -->
+    @{
+      bool passed = Model.CorrectAnswerCount >= 18;
     }
-    else
-    {
-        <h4 style="color: red">Siz testdan o'tolmadingiz :)</h4>
-    }
-}
+    <div class="status-box @(passed ? "success" : "fail")">
+      @if (passed)
+      {
+        <i class="fas fa-check-circle"></i>
+        <span>Siz testdan muvaffaqiyatli o‘tdingiz 🎉</span>
+      }
+      else
+      {
+        <i class="fas fa-xmark-circle"></i>
+        <span>Siz testdan o‘tolmadingiz 😔</span>
+      }
+    </div>
 
-<a 
-    class="btn btn-primary" 
-    asp-action="GetTests" 
-    asp-route-tickedId="@Model.TicketId" 
-    asp-route-retake="true"
->Qayta ishlash
-</a>
+    <!-- Bosh sahifa -->
+    <a class="btn-retake"
+       asp-action="Tickets"
+       asp-route-tickedId="@Model.TicketId"
+       asp-route-retake="true">
+      Bosh sahifa
+    </a>
+
+  </div>
+
+</body>
+</html>
