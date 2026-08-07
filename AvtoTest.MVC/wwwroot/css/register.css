@@ -1,25 +1,27 @@
 ﻿/* ========================================
-   ROOT VARIABLES
+   ROOT VARIABLES — Modern Aurora Theme
+   (login.css bilan bir xil dizayn tizimi)
    ======================================== */
 :root {
-    --primary: #6C63FF;
-    --primary-dark: #5a52d5;
-    --primary-light: #8b83ff;
-    --primary-gradient: linear-gradient(135deg, #6C63FF 0%, #3f3d9e 100%);
-    --text-primary: #1a1a2e;
-    --text-secondary: #6b7280;
-    --text-light: #9ca3af;
+    --primary: #7C5CFF;
+    --primary-2: #5B8DFF;
+    --accent: #FF6FA5;
+    --primary-gradient: linear-gradient(135deg, #7C5CFF 0%, #5B8DFF 55%, #4A3FE0 100%);
+    --text-primary: #10121C;
+    --text-secondary: #6B7180;
+    --text-light: #A1A6B4;
+    --bg-page: #F4F5FA;
     --bg-white: #ffffff;
-    --bg-light: #f8f9fe;
-    --bg-input: #f3f4f6;
-    --border-color: #e5e7eb;
-    --shadow-sm: 0 4px 20px rgba(108, 99, 255, 0.08);
-    --shadow-md: 0 20px 60px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 30px 80px rgba(108, 99, 255, 0.15);
-    --shadow-hover: 0 40px 100px rgba(108, 99, 255, 0.2);
-    --radius: 20px;
-    --radius-sm: 12px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --bg-input: #F5F6FB;
+    --border-color: #E7E8F1;
+    --danger: #E23B5C;
+    --success: #21B573;
+    --shadow-card: 0 30px 80px -20px rgba(30, 20, 90, 0.25);
+    --shadow-soft: 0 10px 30px rgba(30, 20, 90, 0.08);
+    --radius-xl: 28px;
+    --radius: 18px;
+    --radius-sm: 14px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ========================================
@@ -37,33 +39,77 @@ html, body {
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg-light);
+    background: var(--bg-page);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
-    background-image: radial-gradient(ellipse at 10% 20%, rgba(108, 99, 255, 0.05) 0%, transparent 50%), radial-gradient(ellipse at 90% 80%, rgba(255, 101, 132, 0.05) 0%, transparent 50%);
+    min-height: 100vh;
+    padding: 24px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+    /* Animated aurora blobs behind everything */
+    body::before,
+    body::after {
+        content: '';
+        position: fixed;
+        width: 42vw;
+        height: 42vw;
+        border-radius: 50%;
+        filter: blur(90px);
+        opacity: 0.35;
+        z-index: 0;
+        animation: float 14s ease-in-out infinite;
+    }
+
+    body::before {
+        background: var(--primary);
+        top: -10%;
+        left: -8%;
+    }
+
+    body::after {
+        background: var(--accent);
+        bottom: -12%;
+        right: -6%;
+        animation-delay: -7s;
+    }
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(4%, 6%) scale(1.08);
+    }
 }
 
 /* ========================================
-   REGISTER WRAPPER - FULL SCREEN
+   REGISTER WRAPPER — floating glass card
    ======================================== */
 .register-wrapper {
     width: 100%;
-    min-height: 100vh;
+    max-width: 980px;
+    min-height: 680px;
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: 1fr 1.15fr;
     background: var(--bg-white);
-    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
     overflow: hidden;
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 /* ========================================
-   LEFT PANEL - BRANDING
+   LEFT PANEL — BRANDING
    ======================================== */
 .brand-panel {
     background: var(--primary-gradient);
-    padding: 60px 50px;
+    padding: 56px 46px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -75,23 +121,18 @@ body {
     .brand-panel::before {
         content: '';
         position: absolute;
-        top: -30%;
-        right: -30%;
-        width: 80%;
-        height: 80%;
-        background: rgba(255, 255, 255, 0.04);
-        border-radius: 50%;
+        inset: 0;
+        background-image: radial-gradient(circle at 20% 15%, rgba(255,255,255,0.18) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(255,255,255,0.12) 0%, transparent 45%);
     }
 
     .brand-panel::after {
         content: '';
         position: absolute;
-        bottom: -20%;
-        left: -20%;
-        width: 60%;
-        height: 60%;
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 50%;
+        inset: 0;
+        background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px);
+        background-size: 22px 22px;
+        mask-image: linear-gradient(to bottom, black, transparent 75%);
+        opacity: 0.5;
     }
 
     .brand-panel > * {
@@ -99,7 +140,6 @@ body {
         z-index: 1;
     }
 
-/* Logo */
 .brand-header {
     display: flex;
     align-items: center;
@@ -107,122 +147,124 @@ body {
 }
 
     .brand-header .logo-icon {
-        width: 48px;
-        height: 48px;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
+        width: 46px;
+        height: 46px;
+        background: rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.25);
         border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 22px;
-        font-weight: 700;
-    }
-
-    .brand-header .logo-text {
-        font-size: 22px;
+        font-size: 18px;
         font-weight: 700;
         letter-spacing: -0.5px;
     }
 
+    .brand-header .logo-text {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+    }
+
         .brand-header .logo-text span {
             font-weight: 300;
-            opacity: 0.8;
+            opacity: 0.75;
         }
 
-/* Content */
 .brand-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 30px 0;
+    padding: 24px 0;
 }
 
     .brand-content .badge {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.15);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.14);
         backdrop-filter: blur(10px);
-        padding: 6px 18px;
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 7px 16px;
         border-radius: 50px;
         font-size: 12px;
         font-weight: 500;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        margin-bottom: 20px;
+        letter-spacing: 0.4px;
+        margin-bottom: 22px;
         width: fit-content;
     }
 
     .brand-content h1 {
-        font-size: 42px;
+        font-size: 40px;
         font-weight: 700;
-        line-height: 1.2;
+        line-height: 1.18;
         margin-bottom: 14px;
-        letter-spacing: -1px;
+        letter-spacing: -1.2px;
     }
 
     .brand-content p {
-        font-size: 16px;
+        font-size: 15.5px;
         opacity: 0.85;
         line-height: 1.7;
-        max-width: 85%;
+        max-width: 88%;
     }
 
-/* Features */
 .brand-features {
-    margin-top: 32px;
+    margin-top: 34px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
 }
 
     .brand-features .feature {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 12px;
         font-size: 14px;
-        opacity: 0.9;
+        opacity: 0.92;
     }
 
         .brand-features .feature .check {
-            width: 20px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.15);
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255,255,255,0.22);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 11px;
         }
 
-/* Footer */
 .brand-footer {
-    font-size: 13px;
-    opacity: 0.6;
+    font-size: 12.5px;
+    opacity: 0.55;
     padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 /* ========================================
-   RIGHT PANEL - FORM
+   RIGHT PANEL — FORM
    ======================================== */
 .form-panel {
-    padding: 50px 48px;
+    padding: 48px 52px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     background: var(--bg-white);
-    max-width: 580px;
-    margin: 0 auto;
     width: 100%;
+    overflow-y: auto;
 }
 
 .form-header {
-    margin-bottom: 32px;
+    margin-bottom: 26px;
 }
 
     .form-header h2 {
-        font-size: 28px;
+        font-size: 26px;
         font-weight: 700;
         color: var(--text-primary);
         letter-spacing: -0.5px;
@@ -230,33 +272,64 @@ body {
 
     .form-header p {
         color: var(--text-secondary);
-        font-size: 15px;
-        margin-top: 4px;
+        font-size: 14.5px;
+        margin-top: 6px;
     }
 
 /* Validation Summary */
 .validation-summary {
-    background: #fef2f2;
-    border-left: 4px solid #ef4444;
+    background: #FDEEF1;
+    border-left: 4px solid var(--danger);
     padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 14px;
-    color: #991b1b;
-}
-
-/* Form Floating */
-.form-floating {
-    position: relative;
+    border-radius: 10px;
     margin-bottom: 18px;
+    font-size: 13.5px;
+    color: #9A2242;
 }
 
-    .form-floating input {
+    .validation-summary:empty {
+        display: none;
+    }
+
+/* ========================================
+   FORM FIELDS — static label above input
+   (login sahifasidagi bilan bir xil, ishonchli usul)
+   ======================================== */
+.field-group {
+    margin-bottom: 16px;
+}
+
+.field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.input-shell {
+    position: relative;
+}
+
+    .input-shell .field-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        color: var(--text-light);
+        z-index: 2;
+        pointer-events: none;
+        transition: var(--transition);
+    }
+
+    .input-shell input {
         width: 100%;
-        padding: 16px 18px;
-        border: 2px solid var(--bg-input);
+        padding: 15px 46px 15px 46px;
+        border: 1.5px solid var(--border-color);
         border-radius: var(--radius-sm);
-        font-size: 15px;
+        font-size: 14.5px;
         transition: var(--transition);
         background: var(--bg-input);
         color: var(--text-primary);
@@ -264,98 +337,159 @@ body {
         font-family: inherit;
     }
 
-        .form-floating input:focus {
+        .input-shell input::placeholder {
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        .input-shell input:focus {
             border-color: var(--primary);
             background: var(--bg-white);
-            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.08);
+            box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.1);
         }
 
-        .form-floating input::placeholder {
-            color: var(--text-light);
-        }
-
-    .form-floating label {
-        position: absolute;
-        left: 18px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: transparent;
-        padding: 0 4px;
-        font-size: 14px;
-        color: var(--text-secondary);
-        transition: var(--transition);
-        pointer-events: none;
-    }
-
-    .form-floating input:focus + label,
-    .form-floating input:not(:placeholder-shown) + label {
-        top: 0;
-        transform: translateY(-50%) scale(0.82);
-        background: var(--bg-white);
-        color: var(--primary);
-        font-weight: 500;
-        padding: 0 6px;
-    }
-
-    .form-floating input:focus + label {
+    .input-shell:focus-within .field-icon {
         color: var(--primary);
     }
 
-.text-danger {
-    color: #ef4444;
-    font-size: 13px;
-    margin-top: 4px;
-    display: block;
+/* Password visibility toggle */
+.pw-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    border-radius: 8px;
+    transition: var(--transition);
 }
 
+    .pw-toggle:hover {
+        color: var(--primary);
+        background: rgba(124, 92, 255, 0.08);
+    }
+
+    .pw-toggle svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .pw-toggle .icon-off {
+        display: none;
+    }
+
+    .pw-toggle.is-visible .icon-on {
+        display: none;
+    }
+
+    .pw-toggle.is-visible .icon-off {
+        display: block;
+    }
+
+/* ========================================
+   VALIDATION ERRORS
+   ======================================== */
+.text-danger {
+    color: var(--danger) !important;
+    font-size: 12.5px;
+    margin-top: 6px;
+    display: block !important;
+    font-weight: 500;
+}
+
+.input-validation-error {
+    border-color: var(--danger) !important;
+}
+
+    .input-validation-error:focus {
+        border-color: var(--danger) !important;
+        box-shadow: 0 0 0 4px rgba(226, 59, 92, 0.1) !important;
+    }
+
+/* Password hint + strength bar */
 .password-hint {
     font-size: 12px;
     color: var(--text-light);
-    margin-top: 4px;
-    display: block;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
+
+.password-strength {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+    .password-strength .bar {
+        height: 4px;
+        flex: 1;
+        border-radius: 4px;
+        background: var(--border-color);
+        transition: var(--transition);
+    }
+
+    .password-strength.weak .bar:nth-child(1) {
+        background: var(--danger);
+    }
+
+    .password-strength.medium .bar:nth-child(1),
+    .password-strength.medium .bar:nth-child(2) {
+        background: #F5A524;
+    }
+
+    .password-strength.strong .bar {
+        background: var(--success);
+    }
 
 /* Register Button */
 .btn-register {
     width: 100%;
     padding: 16px;
     background: var(--primary-gradient);
+    background-size: 160% 160%;
     border: none;
     border-radius: var(--radius-sm);
     color: white;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
     font-family: inherit;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
     position: relative;
     overflow: hidden;
-    margin-top: 4px;
+    box-shadow: 0 10px 30px -8px rgba(91, 65, 255, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 6px;
 }
 
-    .btn-register::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-        transition: var(--transition);
-    }
-
-    .btn-register:hover::before {
-        left: 100%;
-    }
-
     .btn-register:hover {
+        background-position: 100% 0;
         transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(108, 99, 255, 0.35);
+        box-shadow: 0 14px 34px -6px rgba(91, 65, 255, 0.55);
     }
 
     .btn-register:active {
         transform: translateY(0);
+    }
+
+    .btn-register .arrow {
+        transition: var(--transition);
+    }
+
+    .btn-register:hover .arrow {
+        transform: translateX(3px);
     }
 
 /* Auth Links */
@@ -363,25 +497,29 @@ body {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
     .auth-links a {
         color: var(--text-secondary);
         text-decoration: none;
-        font-size: 14px;
+        font-size: 13.5px;
         transition: var(--transition);
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
     }
 
         .auth-links a:hover {
             color: var(--primary);
         }
 
-        .auth-links a .icon {
-            font-size: 16px;
+        .auth-links a strong {
+            color: var(--text-primary);
+        }
+
+        .auth-links a:hover strong {
+            color: var(--primary);
         }
 
 /* Divider */
@@ -389,7 +527,7 @@ body {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin: 24px 0 20px;
+    margin: 22px 0 18px;
 }
 
     .divider::before,
@@ -402,10 +540,10 @@ body {
 
     .divider span {
         color: var(--text-light);
-        font-size: 12px;
-        font-weight: 500;
+        font-size: 11.5px;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.6px;
     }
 
 /* External Providers */
@@ -417,14 +555,14 @@ body {
 
     .external-providers .btn-external {
         flex: 1;
-        min-width: 80px;
+        min-width: 100px;
         padding: 12px 16px;
-        border: 2px solid var(--border-color);
+        border: 1.5px solid var(--border-color);
         border-radius: var(--radius-sm);
         background: var(--bg-white);
         color: var(--text-secondary);
-        font-size: 14px;
-        font-weight: 500;
+        font-size: 13.5px;
+        font-weight: 600;
         cursor: pointer;
         transition: var(--transition);
         font-family: inherit;
@@ -436,10 +574,10 @@ body {
 
         .external-providers .btn-external:hover {
             border-color: var(--primary);
-            background: #f8f7ff;
+            background: #F7F6FF;
             color: var(--primary);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 6px 16px rgba(124, 92, 255, 0.12);
         }
 
         .external-providers .btn-external:active {
@@ -448,7 +586,7 @@ body {
 
 .no-external {
     color: var(--text-secondary);
-    font-size: 14px;
+    font-size: 13.5px;
     line-height: 1.6;
     text-align: center;
 }
@@ -456,7 +594,7 @@ body {
     .no-external a {
         color: var(--primary);
         text-decoration: none;
-        font-weight: 500;
+        font-weight: 600;
     }
 
         .no-external a:hover {
@@ -465,10 +603,10 @@ body {
 
 /* Footer */
 .register-footer {
-    margin-top: 28px;
-    padding-top: 20px;
+    margin-top: 24px;
+    padding-top: 18px;
     border-top: 1px solid var(--border-color);
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--text-light);
     text-align: center;
 }
@@ -488,21 +626,22 @@ body {
 @media (max-width: 992px) {
     .register-wrapper {
         grid-template-columns: 1fr;
-        min-height: 100vh;
+        min-height: unset;
+        max-width: 520px;
     }
 
     .brand-panel {
-        padding: 40px 32px;
-        min-height: 280px;
+        padding: 40px 36px;
+        min-height: 240px;
     }
 
     .brand-content h1 {
-        font-size: 30px;
+        font-size: 28px;
     }
 
     .brand-content p {
         max-width: 100%;
-        font-size: 15px;
+        font-size: 14.5px;
     }
 
     .brand-features {
@@ -514,31 +653,34 @@ body {
     }
 
     .form-panel {
-        padding: 40px 32px;
-        max-width: 100%;
+        padding: 36px 34px;
     }
 
     .form-header h2 {
-        font-size: 24px;
+        font-size: 23px;
     }
 }
 
 @media (max-width: 480px) {
+    body {
+        padding: 12px;
+    }
+
     .brand-panel {
-        padding: 28px 20px;
-        min-height: 200px;
+        padding: 28px 22px;
+        min-height: 180px;
     }
 
     .brand-content h1 {
-        font-size: 24px;
+        font-size: 23px;
     }
 
     .form-panel {
-        padding: 28px 16px;
+        padding: 28px 20px;
     }
 
     .form-header h2 {
-        font-size: 22px;
+        font-size: 21px;
     }
 
     .external-providers {

@@ -99,10 +99,10 @@ using (var scopeService = app.Services.CreateScope())
     }
 }
 
-    //app.MapControllerRoute(
-    //name: "default",
-    //pattern: "{controller=Home}/{action=Tickets}/{id?}")
-    //.WithStaticAssets();
+app.MapControllerRoute(
+name: "default",
+pattern: "{controller=Test}/{action=Tickets}/{id?}")
+.WithStaticAssets();
 
 
 app.Run();
