@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Sockets;
 
 namespace AvtoTest.MVC.Controllers;
 
@@ -41,7 +42,7 @@ public class TestController : Controller
     {
 
         var user = await GetUser();
-        var result = await _resultRepository.GetResultById(ticketId, user.Id);
+        var result = await _resultRepository.GetResultById(ticketId, user.Id);//null
 
         if (result is not null && retake == false)
             return RedirectToAction("Results", result);
@@ -95,16 +96,43 @@ public class TestController : Controller
     {
         var correctAnswerCount = GetCorrectAnswersCount();
         ViewBag.Count = correctAnswerCount;
-
-        var ticket = new Ticket { Id = ticketId };
+        
+        var ticket =  new Ticket { Id = ticketId };
         var user = await GetUser();
         
 
         await _resultRepository.AddResult(ticketId, user.Id, correctAnswerCount);
 
+        ViewBag.TicketId = ticket.Id;
+        ViewBag.Ticket = ticket;
+        ViewBag.Context = HttpContext;
+
+        var (test, tests) = _testService.GetSortedTest(ticket.StartIndex, ticket.EndIndex, ticket.StartIndex);
+
+        ViewBag.Tests = tests;
+
+        return View(test);
+    }
+
+
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> TestResult(string action, byte ticketId)
+    {
+        var ticket = new Ticket { Id = ticketId };
+
         DeleteCookies(ticket);
-        DeleteCookies("language");
-        return View();
+
+        if (action == "Bosh sahifa")
+        {
+            return RedirectToAction("Tickets", "Test");
+        }
+        else if (action == "Qayta ishlash")
+        {
+
+        }
+
+        return RedirectToAction("GetTests", new { ticketId = ticketId, testId = 0 });
     }
     private void AddCookies(string key, string value)
     {
@@ -165,5 +193,9 @@ public class TestController : Controller
             AddCookies(CorrectAnswersCount, count.ToString());
         }
     }
+    //private async Task<IActionResult> HandleRetryTest(byte ticketId)
+    //{
+    //    await _resultRepository.DeleteResult
+    //}
 
 }

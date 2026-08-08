@@ -7,6 +7,10 @@
     Ticket ticket = ViewBag.Ticket;
     var test = Model;
     List<Test> tests = ViewBag.Tests;
+    if (test is null)
+    {
+        // test = tests[]
+    }
 }
 
 <link rel="stylesheet" href="~/css/test.css" asp-append-version="true" />
