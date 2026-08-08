@@ -42,13 +42,22 @@ public class TestController : Controller
     {
 
         var user = await GetUser();
-        var result = await _resultRepository.GetResultById(ticketId, user.Id);//null
+        var result = await _resultRepository.GetResultById(ticketId, user.Id);
 
         if (result is not null && retake == false)
             return RedirectToAction("Results", result);
 
         if (retake && result is not null)
             await _resultRepository.DeleteResult(result);
+
+        if (retake)
+        {
+            if (result is not null)
+                await _resultRepository.DeleteResult(result);
+
+            DeleteCookies(new Ticket { Id = ticketId });
+            return RedirectToAction("GetTests", new { ticketId, testId = 0 });
+        }
 
         _testService.ChangeLanguage(language, HttpContext);
 
@@ -114,26 +123,6 @@ public class TestController : Controller
         return View(test);
     }
 
-
-    [Authorize]
-    [HttpPost]
-    public async Task<IActionResult> TestResult(string action, byte ticketId)
-    {
-        var ticket = new Ticket { Id = ticketId };
-
-        DeleteCookies(ticket);
-
-        if (action == "Bosh sahifa")
-        {
-            return RedirectToAction("Tickets", "Test");
-        }
-        else if (action == "Qayta ishlash")
-        {
-
-        }
-
-        return RedirectToAction("GetTests", new { ticketId = ticketId, testId = 0 });
-    }
     private void AddCookies(string key, string value)
     {
         var check = CheckCookie(key);
@@ -145,11 +134,7 @@ public class TestController : Controller
     }
     private void DeleteCookies(string key)
     {
-        var check = CheckCookie(key);
-        if (check)
-        {
-            HttpContext.Response.Cookies.Delete(key);
-        }
+        HttpContext.Response.Cookies.Delete(key);
     }
     private void DeleteCookies(Ticket ticket)
     {

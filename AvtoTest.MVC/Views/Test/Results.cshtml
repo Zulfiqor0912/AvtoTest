@@ -66,15 +66,26 @@
       }
     </div>
 
+    <div class="actions">
     <!-- Bosh sahifa -->
-    <a class="btn-retake"
+    <a class="btn-home"
        asp-action="Tickets"
-       asp-route-tickedId="@Model.TicketId"
-       asp-route-retake="true">
-      Bosh sahifa
+       asp-route-tickedId="@Model.TicketId">
+        <i class="fas fa-home"></i>
+        Bosh sahifa
     </a>
 
-  </div>
+    <!-- Qayta ishlash -->
+    <a class="btn-retry"
+       asp-action="GetTests"
+       asp-route-tickedId="@ViewBag.TicketId"
+       asp-route-retake="true"
+       onclick="return confirm('⚠️ Testni qayta boshlashga ishonchingiz komilmi?\nBarcha natijalar o\'chiriladi va test qaytadan boshlanadi!');">
+        <i class="fas fa-rotate-right"></i>
+        Qayta ishlash
+    </a>
+    </div>
+</div>
 
 </body>
 </html>

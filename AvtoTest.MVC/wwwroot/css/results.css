@@ -230,3 +230,137 @@ body {
         align-self: flex-start;
     }
 }
+
+/* ========================================
+   ACTIONS - RASMDAGIDEK
+   ======================================== */
+
+.actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Bosh sahifa ---------- */
+.btn-home {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: #f0f2f5;
+    color: #1a2332;
+    border: 1.5px solid #e0e4ea;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    min-width: 160px;
+}
+
+    .btn-home i {
+        font-size: 17px;
+        color: #4a5a72;
+    }
+
+    .btn-home:hover {
+        background: #e6e9ef;
+        border-color: #c8d0dc;
+        color: #1a2332;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+/* ---------- Qayta ishlash ---------- */
+.btn-retry {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: #1a2332;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(26, 35, 50, 0.30);
+    min-width: 160px;
+}
+
+    .btn-retry i {
+        font-size: 17px;
+    }
+
+    .btn-retry:hover {
+        background: #0d1420;
+        color: #ffffff;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(26, 35, 50, 0.45);
+    }
+
+    .btn-retry:active {
+        transform: translateY(0px);
+    }
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 600px) {
+    .actions {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .btn-home,
+    .btn-retry {
+        width: 100%;
+        min-width: unset;
+        justify-content: center;
+        padding: 14px 20px;
+    }
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+    .btn-home {
+        background: #2a3852;
+        color: #d6e2f5;
+        border-color: #3e5070;
+    }
+
+        .btn-home i {
+            color: #b0c4e0;
+        }
+
+        .btn-home:hover {
+            background: #34445f;
+            border-color: #506582;
+            color: #d6e2f5;
+        }
+
+    .btn-retry {
+        background: #4a6cf7;
+        box-shadow: 0 4px 16px rgba(74, 108, 247, 0.35);
+    }
+
+        .btn-retry:hover {
+            background: #3b5de0;
+            box-shadow: 0 8px 28px rgba(74, 108, 247, 0.50);
+        }
+}
