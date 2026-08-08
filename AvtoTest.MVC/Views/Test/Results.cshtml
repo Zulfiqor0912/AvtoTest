@@ -70,7 +70,7 @@
     <!-- Bosh sahifa -->
     <a class="btn-home"
        asp-action="Tickets"
-       asp-route-tickedId="@Model.TicketId">
+       asp-route-ticketId="@Model.TicketId">
         <i class="fas fa-home"></i>
         Bosh sahifa
     </a>
@@ -78,7 +78,7 @@
     <!-- Qayta ishlash -->
     <a class="btn-retry"
        asp-action="GetTests"
-       asp-route-tickedId="@ViewBag.TicketId"
+       asp-route-ticketId="@Model.TicketId"
        asp-route-retake="true"
        onclick="return confirm('⚠️ Testni qayta boshlashga ishonchingiz komilmi?\nBarcha natijalar o\'chiriladi va test qaytadan boshlanadi!');">
         <i class="fas fa-rotate-right"></i>

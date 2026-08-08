@@ -47,9 +47,6 @@ public class TestController : Controller
         if (result is not null && retake == false)
             return RedirectToAction("Results", result);
 
-        if (retake && result is not null)
-            await _resultRepository.DeleteResult(result);
-
         if (retake)
         {
             if (result is not null)

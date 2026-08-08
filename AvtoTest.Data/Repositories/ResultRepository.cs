@@ -33,10 +33,9 @@ public class ResultRepository : IResultRepository
 
     public async Task DeleteResult(Result result)
     {
-        appDbContext.Results
+        await appDbContext.Results
             .Where(r => r.Id == result.Id)
             .ExecuteDeleteAsync();
-        await appDbContext.SaveChangesAsync();
         await GetOrUpdateResults();
     }
 
