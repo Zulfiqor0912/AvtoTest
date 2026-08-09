@@ -1,3 +1,4 @@
+using AspNetCoreGeneratedDocument;
 using AvtoTest.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -23,6 +24,11 @@ namespace AvtoTest.MVC.Controllers
         }
 
         public IActionResult CheckingView()
+        {
+            return View();
+        }
+
+        public IActionResult EntryPage()
         {
             return View();
         }

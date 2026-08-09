@@ -45,6 +45,8 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+app.UseStaticFiles();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -108,7 +110,7 @@ using (var scopeService = app.Services.CreateScope())
 
 app.MapControllerRoute(
 name: "default",
-pattern: "{controller=Test}/{action=Tickets}/{id?}")
+pattern: "{controller=Home}/{action=EntryPage}/{id?}")
 .WithStaticAssets();
 
 
