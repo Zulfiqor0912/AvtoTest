@@ -12,7 +12,7 @@ using System.Net.Sockets;
 
 namespace AvtoTest.MVC.Controllers;
 
-[Authorize]
+//[Authorize]
 public class TestController : Controller
 {
     private readonly TestService _testService;
@@ -82,7 +82,7 @@ public class TestController : Controller
     {
         return View(result);
     }
-    [Authorize]
+    //[Authorize]
     public IActionResult Tickets()
     {
         var tickets = new List<Ticket>();
