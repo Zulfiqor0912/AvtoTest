@@ -68,13 +68,16 @@
                 <i class="fas fa-home"></i>
                 Bosh sahifa
             </a>
-            <a class="btn-secondary" 
-            asp-action="GetTests" 
-            asp-route-ticketId="@ViewBag.TicketId" 
-            asp-route-retake="true">
-                <i class="fas fa-rotate-right"></i>
-                Qayta ishlash
-            </a>
+            <form 
+                asp-action="RetakeTest" 
+                asp-route-ticketId="@ViewBag.TicketId" 
+                asp-route-testId="0"
+                method="post">
+                <button type="submit" class="btn-secondary">
+                    <i class="fas fa-rotate-right"></i>
+                    Qayta ishlash
+                </button>
+            </form>
         </div>
 
     </div>

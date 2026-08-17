@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Net.Sockets;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AvtoTest.MVC.Controllers;
 
@@ -34,7 +35,6 @@ public class TestController : Controller
     {
         return View();
     }
-    
     public async Task<IActionResult> GetTests(
         byte ticketId, 
         int testId = 0, 
@@ -43,7 +43,8 @@ public class TestController : Controller
     {
         
         var user = await GetUser();
-        if (CheckLogin())
+
+        if (await CheckLogin())
         {
             var result = await _resultRepository.GetResultById(ticketId, user.Id);
 
@@ -75,40 +76,26 @@ public class TestController : Controller
         }
         else
         {
-            if (GetTestsSolvedCount())
+            
+            if (retake)
             {
-                var result = await _resultRepository.GetResultById(ticketId, user.Id);
-
-                if (result is not null && retake == false)
-                    return RedirectToAction("Results", result);
-
-                if (retake)
-                {
-                    if (result is not null)
-                        await _resultRepository.DeleteResult(result);
-
-                    DeleteCookies(new Ticket { Id = ticketId });
-                    return RedirectToAction("GetTests", new { ticketId, testId = 0 });
-                }
-
-                _testService.ChangeLanguage(language, HttpContext);
-
-                (Ticket ticket, testId) = _testService.GetTicketAndTestId(ticketId, testId);
-
-                ViewBag.TicketId = ticket.Id;
-                ViewBag.Ticket = ticket;
-                ViewBag.Context = HttpContext;
-
-                var (test, tests) = _testService.GetSortedTest(ticket.StartIndex, ticket.EndIndex, testId);
-
-                ViewBag.Tests = tests;
-
-                return View(test);
+                DeleteCookies(new Ticket { Id = ticketId });
+                return RedirectToAction("GetTests", new { ticketId, testId = 0 });
             }
-            else
-            {
-                return RedirectToPage("/Account/Login", new { area = "Identity" });
-            }
+
+            _testService.ChangeLanguage(language, HttpContext);
+
+            (Ticket ticket, testId) = _testService.GetTicketAndTestId(ticketId, testId);
+
+            ViewBag.TicketId = ticket.Id;
+            ViewBag.Ticket = ticket;
+            ViewBag.Context = HttpContext;
+
+            var (test, tests) = _testService.GetSortedTest(ticket.StartIndex, ticket.EndIndex, testId);
+
+            ViewBag.Tests = tests;
+
+            return View(test);
         }
         
     }
@@ -118,8 +105,6 @@ public class TestController : Controller
         var ticket = new Ticket() { Id = ticketId };
         var test = _testService.ReadFromFile().Find(t => t.Id == testId);
         await AddScore(testId, choiceId, test);
-
-        
 
         return RedirectToAction("GetTests", new { ticketId = ticketId, testId = testId});
     }
@@ -139,10 +124,10 @@ public class TestController : Controller
         var ticket = new Ticket { Id = id };
 
         DeleteCookies(ticket);
-
-        return RedirectToAction("GetTests", new { ticketId = id, testId = 0 });
+        if (GetTestsSolvedCount())
+            return RedirectToAction("GetTests", new { ticketId = id, testId = 0 });
+        else return RedirectToPage("/Account/Login", new { area = "Identity" });
     }
-    [Authorize]
     public async Task<IActionResult> TestResult(byte ticketId)
     {
         var correctAnswerCount = GetCorrectAnswersCount();
@@ -150,9 +135,9 @@ public class TestController : Controller
         
         var ticket =  new Ticket { Id = ticketId };
         var user = await GetUser();
-        
 
-        await _resultRepository.AddResult(ticketId, user.Id, correctAnswerCount);
+        if (await CheckLogin())
+            await _resultRepository.AddResult(ticketId, user.Id, correctAnswerCount);
 
         ViewBag.TicketId = ticket.Id;
         ViewBag.Ticket = ticket;
@@ -163,6 +148,50 @@ public class TestController : Controller
         ViewBag.Tests = tests;
 
         return View(test);
+    }
+    [HttpPost]
+    public async Task<IActionResult> RetakeTest(
+        byte ticketId,
+        int testId = 0,
+        string language = null)
+    {
+        var user = await GetUser();
+        var isLogin = await CheckLogin();
+
+        var ticket = new Ticket { Id = ticketId };
+
+        if (isLogin && user != null)
+        {
+            var result = await _resultRepository.GetResultById(ticketId, user.Id);
+            if (result != null)
+                await _resultRepository.DeleteResult(result);
+        }
+        else
+        {
+            if (!GetTestsSolvedCount())
+            {
+                TempData["ErrorMessage"] = "Siz anonim foydalanuvchi sifatida faqat 2 marta test topshira olasiz. Iltimos, tizimga kiring.";
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+        }
+        DeleteCookies(new Ticket { Id = ticketId });
+
+        return RedirectToAction("GetTests", new
+        {
+            ticketId = ticketId,
+            testId = testId,
+            language = language,
+            retake = true
+        });
+    }
+    public IActionResult CreateTest()
+    {
+        var model = new CreateTest
+        {
+            Choices = new List<string> { "", "", "", "" }, // 4 ta bo'sh variant
+            CorrectChoiceIndex = -1
+        };
+        return View(model);
     }
 
     private void AddCookies(string key, string value)
@@ -235,12 +264,14 @@ public class TestController : Controller
             if (visitor.TestCount == 2) return false;
             visitor.TestCount += 1;
             visitor.LastTestAt = DateTime.UtcNow;
+            var setJson = JsonConvert.SerializeObject(visitor);
+            Response.Cookies.Append("AnonymousUser", setJson);
         }
         return true;
     }
-    private bool CheckLogin()
+    private async Task<bool> CheckLogin()
     {
-        if (GetUser() is null) return false;
+        if (await GetUser() is null) return false;
         else return true;
     }
 

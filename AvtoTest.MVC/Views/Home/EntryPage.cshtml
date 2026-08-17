@@ -10,7 +10,7 @@
 
     <title>E-AVTOMAKTAB</title>
 
-    <link rel="stylesheet" href="~/css/entry.css">
+    <link rel="stylesheet" href="~/css/entry.css" asp-append-version="true">
 </head>
 <body>
 
@@ -22,9 +22,18 @@
 
             <p>Bilimingizni sinang</p>
 
-            <a class="start-button" asp-controller="Test" asp-action="Tickets">
-                TESTNI BOSHLASH
-            </a>
+            <div class="button-row">
+                <a class="start-button" asp-controller="Test" asp-action="Tickets">
+                    TESTNI BOSHLASH
+                </a>
+
+                @if (User.Identity is not null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <a class="start-button admin-button" asp-controller="Test" asp-action="CreateTest">
+                        YANGI TEST QO'SHISH
+                    </a>
+                }
+            </div>
 
         </div>
 

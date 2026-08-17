@@ -1,0 +1,117 @@
+﻿@model AvtoTest.Data.Entities.TestEntities.CreateTest
+
+@{
+    ViewData["Title"] = "Yangi test qo'shish";
+}
+
+<link rel="stylesheet" href="~/css/test.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/CreateTest.css" asp-append-version="true" />
+
+<div class="test-container">
+    <!-- HEADER -->
+    <div class="test-header">
+        <div class="header-left">
+            <h1 class="test-title">🚗 Avtotest</h1>
+            <div class="ticket-info">
+                <span class="ticket-badge">🛠️ Admin panel</span>
+                <span class="question-counter">📝 Yangi savol</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <a class="nav-btn prev" asp-controller="Test" asp-action="Tickets">← Chiptalarga qaytish</a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] is not null)
+    {
+        <div class="alert-success">✅ @TempData["SuccessMessage"]</div>
+    }
+
+    <!-- FORM -->
+    <form asp-action="Create" asp-controller="Test" method="post" enctype="multipart/form-data" class="create-form">
+        @Html.AntiForgeryToken()
+
+        <div class="create-main">
+            <!-- LEFT: QUESTION -->
+            <div class="question-section">
+                <div class="question-header">
+                    <span class="question-number">Savol ma'lumotlari</span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Question" class="form-label">Savol matni</label>
+                    <textarea asp-for="Question" class="form-textarea" rows="4" placeholder="Savol matnini kiriting..."></textarea>
+                    <span asp-validation-for="Question" class="form-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description" class="form-label">Tushuntirish (izoh)</label>
+                    <textarea asp-for="Description" class="form-textarea" rows="4" placeholder="To'g'ri javob nima uchun to'g'ri ekanini tushuntiring (ixtiyoriy)..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Image" class="form-label">Rasm (ixtiyoriy)</label>
+                    <input asp-for="Image" type="file" accept="image/png" class="form-file" />
+                    <p class="form-hint">Yo'l belgisi yoki vaziyat rasmi. Faqat PNG format qabul qilinadi.</p>
+                    <span asp-validation-for="Image" class="form-error"></span>
+                </div>
+            </div>
+
+            <!-- RIGHT: CHOICES -->
+            <div class="choices-section">
+                <h3 class="choices-title">⬇️ Javob variantlari</h3>
+                <p class="form-hint" style="margin-bottom: 14px;">To'g'ri javobni chap tomondagi doiracha orqali belgilang.</p>
+
+                <div class="choices-editor" id="choicesEditor">
+                    @for (int i = 0; i < Model.Choices.Count; i++)
+                    {
+                        string letter = ((char)(65 + i)).ToString();
+                        <div class="choice-row">
+                            <input type="radio" name="CorrectChoiceIndex" value="@i" class="choice-radio" @(Model.CorrectChoiceIndex == i ? "checked" : "") />
+                            <span class="choice-letter">@letter</span>
+                            <input type="text" name="Choices[@i]" value="@Model.Choices[i]" class="choice-input" placeholder="Javob varianti matni..." />
+                        </div>
+                    }
+                </div>
+
+                <button type="button" id="addChoiceBtn" class="add-choice-btn">+ Yana variant qo'shish</button>
+
+                <span asp-validation-for="Choices" class="form-error"></span>
+                <span asp-validation-for="CorrectChoiceIndex" class="form-error"></span>
+
+                <div class="nav-buttons" style="margin-top: 24px;">
+                    <button type="submit" class="nav-btn finish">💾 Testni saqlash</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Choice template used by JS to add new rows -->
+<template id="choiceRowTemplate">
+    <div class="choice-row">
+        <input type="radio" name="CorrectChoiceIndex" value="__INDEX__" class="choice-radio" />
+        <span class="choice-letter">__LETTER__</span>
+        <input type="text" name="Choices[__INDEX__]" class="choice-input" placeholder="Javob varianti matni..." />
+    </div>
+</template>
+
+<script>
+    (function () {
+        var editor = document.getElementById('choicesEditor');
+        var template = document.getElementById('choiceRowTemplate').innerHTML;
+        var addBtn = document.getElementById('addChoiceBtn');
+
+        addBtn.addEventListener('click', function () {
+            var index = editor.querySelectorAll('.choice-row').length;
+            var letter = String.fromCharCode(65 + index);
+            var html = template
+                .replaceAll('__INDEX__', index)
+                .replaceAll('__LETTER__', letter);
+
+            var wrapper = document.createElement('div');
+            wrapper.innerHTML = html.trim();
+            editor.appendChild(wrapper.firstChild);
+        });
+    })();
+</script>

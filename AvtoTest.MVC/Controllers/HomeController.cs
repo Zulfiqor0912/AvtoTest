@@ -1,6 +1,8 @@
+using AvtoTest.Data.Entities;
 using AvtoTest.Data.Entities.TestEntities;
 using AvtoTest.MVC.Models;
 using AvtoTest.Service.Services.Interfeces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -9,10 +11,12 @@ namespace AvtoTest.MVC.Controllers
 {
     public class HomeController : Controller
     {
-        public IHomeService homeService;
-        public HomeController(IHomeService homeService)
+        private readonly IHomeService homeService;
+        private readonly UserManager<CustomUser> _userManager;
+        public HomeController(IHomeService homeService, UserManager<CustomUser> userManager)
         {
             this.homeService = homeService;
+            _userManager = userManager;
         }
         public IActionResult Index()
         {
@@ -36,40 +40,42 @@ namespace AvtoTest.MVC.Controllers
         }
         public async Task<IActionResult> EntryPage()
         {
-            var visitor = new AnonymousUser();
-            var getJson = Request.Cookies["AnonymousUser"];
-
-            if (getJson != null)
-                visitor = JsonConvert.DeserializeObject<AnonymousUser>(getJson);
-
-            var connection = HttpContext.Connection;
-            var ipAddress = connection.RemoteIpAddress?.ToString();
-            var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
-            
-
-            if (visitor is null)
+            if (!(await CheckLogin()))
             {
-                visitor = new AnonymousUser()
+                var visitor = new AnonymousUser();
+                var getJson = Request.Cookies["AnonymousUser"];
+
+                if (getJson != null)
+                    visitor = JsonConvert.DeserializeObject<AnonymousUser>(getJson);
+
+                var connection = HttpContext.Connection;
+                var ipAddress = connection.RemoteIpAddress?.ToString();
+                var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
+
+
+                if (visitor is null)
                 {
-                    Id = Guid.NewGuid(),
-                    TestCount = visitor.TestCount, //faqat test yechilganida o'zgaradi
-                    IpAddress = ipAddress,
-                    UserAgent = userAgent,
-                    BrowseType = ParseBrwserType(userAgent),
-                    DeviceType = ParseDeviceType(userAgent),
-                    OperatingSystem = ParseOperatingSystem(userAgent),
-                    CreateAt = DateTime.UtcNow, // bu ham nomalum
-                    LastVisited = DateTime.UtcNow, // 
-                    LastTestAt = null
-                };
+                    visitor = new AnonymousUser()
+                    {
+                        Id = Guid.NewGuid(),
+                        TestCount = visitor.TestCount, //faqat test yechilganida o'zgaradi
+                        IpAddress = ipAddress,
+                        UserAgent = userAgent,
+                        BrowseType = ParseBrwserType(userAgent),
+                        DeviceType = ParseDeviceType(userAgent),
+                        OperatingSystem = ParseOperatingSystem(userAgent),
+                        CreateAt = DateTime.UtcNow, // bu ham nomalum
+                        LastVisited = DateTime.UtcNow, // 
+                        LastTestAt = null
+                    };
+                }
+                else
+                {
+                    visitor.LastVisited = DateTime.UtcNow;
+                }
+                var json = JsonConvert.SerializeObject(visitor);
+                Response.Cookies.Append("AnonymousUser", json);
             }
-            else
-            {
-                visitor.LastVisited = DateTime.UtcNow;
-            }
-            
-            var json = JsonConvert.SerializeObject(visitor);
-            Response.Cookies.Append("AnonymousUser", json);
             return View();
         }
 
@@ -162,6 +168,16 @@ namespace AvtoTest.MVC.Controllers
             if (ua.Contains("cros")) return "Chrome OS";
 
             return "Other";
+        }
+        private async Task<CustomUser> GetUser()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            return user!;
+        }
+        private async Task<bool> CheckLogin()
+        {
+            if (await GetUser() is null) return false;
+            else return true;
         }
     }
 }
