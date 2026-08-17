@@ -2,7 +2,7 @@
 
 namespace AvtoTest.Data.Repositories.Interfaces;
 
-public interface IVisitorUserRepository
+public interface IHomeRepasitory
 {
     public Task AddUser(AnonymousUser anonymousUser);
     public Task UpdateUser(AnonymousUser anonymousUser);

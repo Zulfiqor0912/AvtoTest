@@ -11,11 +11,13 @@ namespace AvtoTest.Service.Services;
 
 public class TestService : ITestService
 {
-    private  readonly ITestRepository testRepository;
+    private readonly ITestRepository testRepository;
+    private readonly IHomeRepasitory homeRepasitory;
     public List<Test> Tests { get; set; }
-    public TestService(ITestRepository testRepository)
+    public TestService(ITestRepository testRepository, IHomeRepasitory homeRepasitory)
     {
         this.testRepository = testRepository;
+        this.homeRepasitory = homeRepasitory;
         Tests = testRepository.ReadFromFile();
     }
 
@@ -90,5 +92,10 @@ public class TestService : ITestService
             testId = ticket.StartIndex;
 
         return new(ticket, testId);
+    }
+
+    public bool CheckAnonymousUser()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -15,7 +15,7 @@ public class AppDbContext : IdentityDbContext<CustomUser>
 
     public DbSet<CustomUser> CustomUsers { get; set; }
     public DbSet<Result> Results { get; set; }
-    public DbSet<AnonymousUser> AnonymousUsers { get; set; }
+    //public DbSet<AnonymousUser> AnonymousUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

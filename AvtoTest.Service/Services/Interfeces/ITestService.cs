@@ -13,4 +13,5 @@ public interface ITestService
     public string GetPath();
 
     public void ChangeLanguage(string language, HttpContext httpContext);
+    public bool CheckAnonymousUser();
 }

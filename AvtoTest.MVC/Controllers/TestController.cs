@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Net.Sockets;
 
 namespace AvtoTest.MVC.Controllers;
@@ -33,42 +34,83 @@ public class TestController : Controller
     {
         return View();
     }
-    [Authorize]
+    
     public async Task<IActionResult> GetTests(
         byte ticketId, 
         int testId = 0, 
         string language = null, 
         bool retake = false)
     {
-
+        
         var user = await GetUser();
-        var result = await _resultRepository.GetResultById(ticketId, user.Id);
-
-        if (result is not null && retake == false)
-            return RedirectToAction("Results", result);
-
-        if (retake)
+        if (CheckLogin())
         {
-            if (result is not null)
-                await _resultRepository.DeleteResult(result);
+            var result = await _resultRepository.GetResultById(ticketId, user.Id);
 
-            DeleteCookies(new Ticket { Id = ticketId });
-            return RedirectToAction("GetTests", new { ticketId, testId = 0 });
+            if (result is not null && retake == false)
+                return RedirectToAction("Results", result);
+
+            if (retake)
+            {
+                if (result is not null)
+                    await _resultRepository.DeleteResult(result);
+
+                DeleteCookies(new Ticket { Id = ticketId });
+                return RedirectToAction("GetTests", new { ticketId, testId = 0 });
+            }
+
+            _testService.ChangeLanguage(language, HttpContext);
+
+            (Ticket ticket, testId) = _testService.GetTicketAndTestId(ticketId, testId);
+
+            ViewBag.TicketId = ticket.Id;
+            ViewBag.Ticket = ticket;
+            ViewBag.Context = HttpContext;
+
+            var (test, tests) = _testService.GetSortedTest(ticket.StartIndex, ticket.EndIndex, testId);
+
+            ViewBag.Tests = tests;
+
+            return View(test);
         }
+        else
+        {
+            if (GetTestsSolvedCount())
+            {
+                var result = await _resultRepository.GetResultById(ticketId, user.Id);
 
-        _testService.ChangeLanguage(language, HttpContext);
+                if (result is not null && retake == false)
+                    return RedirectToAction("Results", result);
 
-        (Ticket ticket, testId) = _testService.GetTicketAndTestId(ticketId, testId);
-      
-        ViewBag.TicketId = ticket.Id;
-        ViewBag.Ticket = ticket;
-        ViewBag.Context = HttpContext;
+                if (retake)
+                {
+                    if (result is not null)
+                        await _resultRepository.DeleteResult(result);
 
-        var (test, tests) = _testService.GetSortedTest(ticket.StartIndex, ticket.EndIndex, testId);
+                    DeleteCookies(new Ticket { Id = ticketId });
+                    return RedirectToAction("GetTests", new { ticketId, testId = 0 });
+                }
 
-        ViewBag.Tests = tests;
+                _testService.ChangeLanguage(language, HttpContext);
 
-        return View(test);
+                (Ticket ticket, testId) = _testService.GetTicketAndTestId(ticketId, testId);
+
+                ViewBag.TicketId = ticket.Id;
+                ViewBag.Ticket = ticket;
+                ViewBag.Context = HttpContext;
+
+                var (test, tests) = _testService.GetSortedTest(ticket.StartIndex, ticket.EndIndex, testId);
+
+                ViewBag.Tests = tests;
+
+                return View(test);
+            }
+            else
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+        }
+        
     }
     [HttpPost]
     public async Task<IActionResult> GetTestsPost(byte ticketId = 0, int testId = 0, int choiceId = 0)
@@ -76,6 +118,9 @@ public class TestController : Controller
         var ticket = new Ticket() { Id = ticketId };
         var test = _testService.ReadFromFile().Find(t => t.Id == testId);
         await AddScore(testId, choiceId, test);
+
+        
+
         return RedirectToAction("GetTests", new { ticketId = ticketId, testId = testId});
     }
     public async Task<IActionResult> Results(Result result)
@@ -179,5 +224,24 @@ public class TestController : Controller
     //{
     //    await _resultRepository.DeleteResult
     //}
+
+    private bool GetTestsSolvedCount()
+    {
+        var json = Request.Cookies["AnonymousUser"];
+        AnonymousUser visitor = new AnonymousUser();
+        if (json != null)
+        {
+            visitor = JsonConvert.DeserializeObject<AnonymousUser>(json);
+            if (visitor.TestCount == 2) return false;
+            visitor.TestCount += 1;
+            visitor.LastTestAt = DateTime.UtcNow;
+        }
+        return true;
+    }
+    private bool CheckLogin()
+    {
+        if (GetUser() is null) return false;
+        else return true;
+    }
 
 }

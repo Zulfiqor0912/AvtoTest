@@ -6,6 +6,7 @@ using AvtoTest.Data.Entities;
 using AvtoTest.Data.Repositories;
 using AvtoTest.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using AvtoTest.Service.Services.Interfeces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<TestService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IResultRepository, ResultRepository>();
+builder.Services.AddScoped<IHomeRepasitory, HomeRepository>();
+builder.Services.AddScoped<IHomeService, HomeService>();
 
 
 builder.Services.AddDbContext<AppDbContext>( options => 

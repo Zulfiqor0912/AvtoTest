@@ -1,13 +1,19 @@
-using AspNetCoreGeneratedDocument;
 using AvtoTest.Data.Entities.TestEntities;
 using AvtoTest.MVC.Models;
+using AvtoTest.Service.Services.Interfeces;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace AvtoTest.MVC.Controllers
 {
     public class HomeController : Controller
     {
+        public IHomeService homeService;
+        public HomeController(IHomeService homeService)
+        {
+            this.homeService = homeService;
+        }
         public IActionResult Index()
         {
             return View();
@@ -28,34 +34,43 @@ namespace AvtoTest.MVC.Controllers
         {
             return View();
         }
-
-        public IActionResult EntryPage()
+        public async Task<IActionResult> EntryPage()
         {
-            return View();
-        }
+            var visitor = new AnonymousUser();
+            var getJson = Request.Cookies["AnonymousUser"];
 
-        [HttpPost]
-        public IActionResult EntryPage()
-        {
+            if (getJson != null)
+                visitor = JsonConvert.DeserializeObject<AnonymousUser>(getJson);
+
             var connection = HttpContext.Connection;
-
             var ipAddress = connection.RemoteIpAddress?.ToString();
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
+            
 
-            var user = new AnonymousUser
+            if (visitor is null)
             {
-                Id = Guid.NewGuid(),
-                TestCount = 0, //keyinchalik bazadan tekshiraman agar oxirgi marta test yechgan bo'lsa 2 deb belgilayman keyingi marta count 2 bo'lganda loginga yo'naltiraman.
-                IpAddress = ipAddress,
-                UserAgent = userAgent,
-                BrowseType = ParseBrwserType(userAgent),
-                DeviceType = ParseDeviceType(userAgent),
-                OperatingSystem = ParseOperatingSystem(userAgent),
-                CreateAt = DateTime.UtcNow, // bu ham nomalum
-                LastVisited = DateTime.UtcNow, // bu hali nomalum
-                LastTestAt = null
-            };
-            return RedirectToAction("Tickets","Test");
+                visitor = new AnonymousUser()
+                {
+                    Id = Guid.NewGuid(),
+                    TestCount = visitor.TestCount, //faqat test yechilganida o'zgaradi
+                    IpAddress = ipAddress,
+                    UserAgent = userAgent,
+                    BrowseType = ParseBrwserType(userAgent),
+                    DeviceType = ParseDeviceType(userAgent),
+                    OperatingSystem = ParseOperatingSystem(userAgent),
+                    CreateAt = DateTime.UtcNow, // bu ham nomalum
+                    LastVisited = DateTime.UtcNow, // 
+                    LastTestAt = null
+                };
+            }
+            else
+            {
+                visitor.LastVisited = DateTime.UtcNow;
+            }
+            
+            var json = JsonConvert.SerializeObject(visitor);
+            Response.Cookies.Append("AnonymousUser", json);
+            return View();
         }
 
         private string ParseBrwserType(string? userAgent)
