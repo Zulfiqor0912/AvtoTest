@@ -29,7 +29,7 @@
 
                 @if (User.Identity is not null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                 {
-                    <a class="start-button admin-button" asp-controller="Test" asp-action="CreateTest">
+                    <a class="start-button admin-button" asp-controller="Admin" asp-action="CreateTest">
                         YANGI TEST QO'SHISH
                     </a>
                 }

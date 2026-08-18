@@ -119,14 +119,21 @@ public class TestController : Controller
         return View(tickets);
     }
     [HttpPost]
-    public IActionResult Tickets(byte id)
+    public async Task<IActionResult> Tickets(byte id)
     {
         var ticket = new Ticket { Id = id };
 
         DeleteCookies(ticket);
-        if (GetTestsSolvedCount())
+        if (await CheckLogin())
+        {
             return RedirectToAction("GetTests", new { ticketId = id, testId = 0 });
-        else return RedirectToPage("/Account/Login", new { area = "Identity" });
+        }
+        else
+        {
+            if (GetTestsSolvedCount())
+                return RedirectToAction("GetTests", new { ticketId = id, testId = 0 });
+            else return RedirectToPage("/Account/Login", new { area = "Identity" });
+        }
     }
     public async Task<IActionResult> TestResult(byte ticketId)
     {
@@ -193,7 +200,7 @@ public class TestController : Controller
         };
         return View(model);
     }
-
+    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     private void AddCookies(string key, string value)
     {
         var check = CheckCookie(key);
@@ -253,7 +260,6 @@ public class TestController : Controller
     //{
     //    await _resultRepository.DeleteResult
     //}
-
     private bool GetTestsSolvedCount()
     {
         var json = Request.Cookies["AnonymousUser"];
