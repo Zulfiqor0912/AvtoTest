@@ -1,117 +1,784 @@
-﻿@model AvtoTest.Data.Entities.TestEntities.CreateTest
+﻿@model AvtoTest.Data.Entities.ViewModels.CreateTestViewModel
 
 @{
     ViewData["Title"] = "Yangi test qo'shish";
 }
 
 <link rel="stylesheet" href="~/css/test.css" asp-append-version="true" />
-<link rel="stylesheet" href="~/css/CreateTest.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/createTest.css" asp-append-version="true" />
 
-<div class="test-container">
+<div class="test-container create-test-page">
+
     <!-- HEADER -->
     <div class="test-header">
         <div class="header-left">
             <h1 class="test-title">🚗 Avtotest</h1>
+
             <div class="ticket-info">
                 <span class="ticket-badge">🛠️ Admin panel</span>
                 <span class="question-counter">📝 Yangi savol</span>
             </div>
         </div>
-        <div class="header-right">
-            <a class="nav-btn prev" asp-controller="Test" asp-action="Tickets">← Chiptalarga qaytish</a>
+
+        <div class="header-actions">
+            <a class="nav-btn prev"
+               asp-controller="Test"
+               asp-action="Tickets">
+                Chiptalarga qaytish
+            </a>
+
+            <a class="nav-btn prev"
+               asp-controller="Home"
+               asp-action="EntryPage">
+                Bosh sahifaga qaytish
+            </a>
         </div>
     </div>
 
     @if (TempData["SuccessMessage"] is not null)
     {
-        <div class="alert-success">✅ @TempData["SuccessMessage"]</div>
+        <div class="alert-success">
+            ✅ @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] is not null)
+    {
+        <div class="alert-error">
+            ❌ @TempData["ErrorMessage"]
+        </div>
     }
 
     <!-- FORM -->
-    <form asp-action="Create" asp-controller="Test" method="post" enctype="multipart/form-data" class="create-form">
+    <form asp-controller="Admin"
+          asp-action="CreateTest"
+          method="post"
+          enctype="multipart/form-data"
+          class="create-form"
+          id="createTestForm">
+
         @Html.AntiForgeryToken()
 
-        <div class="create-main">
-            <!-- LEFT: QUESTION -->
-            <div class="question-section">
-                <div class="question-header">
-                    <span class="question-number">Savol ma'lumotlari</span>
-                </div>
+        <div class="create-layout">
 
-                <div class="form-group">
-                    <label asp-for="Question" class="form-label">Savol matni</label>
-                    <textarea asp-for="Question" class="form-textarea" rows="4" placeholder="Savol matnini kiriting..."></textarea>
-                    <span asp-validation-for="Question" class="form-error"></span>
-                </div>
+            <!-- LEFT: LANGUAGES -->
+            <main class="languages-column">
 
-                <div class="form-group">
-                    <label asp-for="Description" class="form-label">Tushuntirish (izoh)</label>
-                    <textarea asp-for="Description" class="form-textarea" rows="4" placeholder="To'g'ri javob nima uchun to'g'ri ekanini tushuntiring (ixtiyoriy)..."></textarea>
-                </div>
+                <!-- ================= LATIN ================= -->
+                <section class="language-card latin-card">
+                    <div class="language-header">
+                        <div class="language-title-wrapper">
+                            <span class="language-flag">🇺🇿</span>
 
-                <div class="form-group">
-                    <label asp-for="Image" class="form-label">Rasm (ixtiyoriy)</label>
-                    <input asp-for="Image" type="file" accept="image/png" class="form-file" />
-                    <p class="form-hint">Yo'l belgisi yoki vaziyat rasmi. Faqat PNG format qabul qilinadi.</p>
-                    <span asp-validation-for="Image" class="form-error"></span>
-                </div>
-            </div>
-
-            <!-- RIGHT: CHOICES -->
-            <div class="choices-section">
-                <h3 class="choices-title">⬇️ Javob variantlari</h3>
-                <p class="form-hint" style="margin-bottom: 14px;">To'g'ri javobni chap tomondagi doiracha orqali belgilang.</p>
-
-                <div class="choices-editor" id="choicesEditor">
-                    @for (int i = 0; i < Model.Choices.Count; i++)
-                    {
-                        string letter = ((char)(65 + i)).ToString();
-                        <div class="choice-row">
-                            <input type="radio" name="CorrectChoiceIndex" value="@i" class="choice-radio" @(Model.CorrectChoiceIndex == i ? "checked" : "") />
-                            <span class="choice-letter">@letter</span>
-                            <input type="text" name="Choices[@i]" value="@Model.Choices[i]" class="choice-input" placeholder="Javob varianti matni..." />
+                            <div>
+                                <h2>LOTIN TILI (O'ZBEK)</h2>
+                                <span class="language-subtitle">
+                                    O'zbek tili — lotin yozuvi
+                                </span>
+                            </div>
                         </div>
-                    }
-                </div>
 
-                <button type="button" id="addChoiceBtn" class="add-choice-btn">+ Yana variant qo'shish</button>
+                        <button type="button"
+                                class="language-save-btn"
+                                data-language="latin">
+                            ✓ Lotin tilini saqlash
+                        </button>
+                    </div>
 
-                <span asp-validation-for="Choices" class="form-error"></span>
-                <span asp-validation-for="CorrectChoiceIndex" class="form-error"></span>
+                    <div class="language-body">
 
-                <div class="nav-buttons" style="margin-top: 24px;">
-                    <button type="submit" class="nav-btn finish">💾 Testni saqlash</button>
-                </div>
-            </div>
+                        <div class="question-grid">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Savol matni
+                                </label>
+
+                                <textarea asp-for="Latin.Question"
+                                          class="form-textarea language-question"
+                                          rows="4"
+                                          placeholder="Savol matnini kiriting..."></textarea>
+
+                                <span asp-validation-for="Latin.Question"
+                                      class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Tushuntirish (izoh)
+                                </label>
+
+                                <textarea asp-for="Latin.Description"
+                                          class="form-textarea language-description"
+                                          rows="4"
+                                          placeholder="To'g'ri javob nima uchun to'g'ri ekanini tushuntiring (ixtiyoriy)..."></textarea>
+
+                                <span asp-validation-for="Latin.Description"
+                                      class="form-error"></span>
+                            </div>
+                        </div>
+
+                        <div class="choices-block">
+                            <div class="choices-heading">
+                                <h3>Javob variantlari</h3>
+                                <span>Variantlar umumiy to'g'ri javob bilan bog'lanadi</span>
+                            </div>
+
+                            <div class="choices-editor"
+                                 data-language="latin"
+                                 id="latinChoices">
+                                @for (int i = 0; i < Model.Latin.Choices.Count; i++)
+                                {
+                                    var letter = ((char)('A' + i)).ToString();
+
+                                    <div class="choice-row">
+                                        <span class="choice-letter">@letter</span>
+
+                                        <input type="text"
+                                               name="Latin.Choices[@i].Text"
+                                               value="@Model.Latin.Choices[i].Text"
+                                               class="choice-input"
+                                               placeholder="@letter varianti matni..." />
+                                    </div>
+                                }
+                            </div>
+
+                            <button type="button"
+                                    class="add-choice-btn"
+                                    data-editor="latinChoices"
+                                    data-prefix="Latin">
+                                + Yana variant qo'shish
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- ================= CYRILLIC ================= -->
+                <section class="language-card cyrillic-card">
+                    <div class="language-header">
+                        <div class="language-title-wrapper">
+                            <span class="language-flag">🇺🇿</span>
+
+                            <div>
+                                <h2>КИРИЛЛ ТИЛИ (ЎЗБЕК)</h2>
+                                <span class="language-subtitle">
+                                    Ўзбек тили — кирилл ёзуви
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="button"
+                                class="language-save-btn"
+                                data-language="cyrillic">
+                            ✓ Кириллни сақлаш
+                        </button>
+                    </div>
+
+                    <div class="language-body">
+
+                        <div class="question-grid">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Савол матни
+                                </label>
+
+                                <textarea asp-for="Cyrillic.Question"
+                                          class="form-textarea language-question"
+                                          rows="4"
+                                          placeholder="Савол матнини киритинг..."></textarea>
+
+                                <span asp-validation-for="Cyrillic.Question"
+                                      class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Тушунтириш (изоҳ)
+                                </label>
+
+                                <textarea asp-for="Cyrillic.Description"
+                                          class="form-textarea language-description"
+                                          rows="4"
+                                          placeholder="Тўғри жавоб нима учун тўғри эканини тушунтиринг (ихтиёрий)..."></textarea>
+
+                                <span asp-validation-for="Cyrillic.Description"
+                                      class="form-error"></span>
+                            </div>
+                        </div>
+
+                        <div class="choices-block">
+                            <div class="choices-heading">
+                                <h3>Жавоб вариантлари</h3>
+                                <span>Тўғри жавоб умумий битта бўлади</span>
+                            </div>
+
+                            <div class="choices-editor"
+                                 data-language="cyrillic"
+                                 id="cyrillicChoices">
+                                @for (int i = 0; i < Model.Cyrillic.Choices.Count; i++)
+                                {
+                                    var letter = ((char)('A' + i)).ToString();
+
+                                    <div class="choice-row">
+                                        <span class="choice-letter">@letter</span>
+
+                                        <input type="text"
+                                               name="Cyrillic.Choices[@i].Text"
+                                               value="@Model.Cyrillic.Choices[i].Text"
+                                               class="choice-input"
+                                               placeholder="@letter варианти матни..." />
+                                    </div>
+                                }
+                            </div>
+
+                            <button type="button"
+                                    class="add-choice-btn"
+                                    data-editor="cyrillicChoices"
+                                    data-prefix="Cyrillic">
+                                + Яна вариант қўшиш
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- ================= RUSSIAN ================= -->
+                <section class="language-card russian-card">
+                    <div class="language-header">
+                        <div class="language-title-wrapper">
+                            <span class="language-flag">🇷🇺</span>
+
+                            <div>
+                                <h2>РУССКИЙ ЯЗЫК</h2>
+                                <span class="language-subtitle">
+                                    Русский язык
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="button"
+                                class="language-save-btn"
+                                data-language="russian">
+                            ✓ Рус тилини сақлаш
+                        </button>
+                    </div>
+
+                    <div class="language-body">
+
+                        <div class="question-grid">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Текст вопроса
+                                </label>
+
+                                <textarea asp-for="Russian.Question"
+                                          class="form-textarea language-question"
+                                          rows="4"
+                                          placeholder="Введите текст вопроса..."></textarea>
+
+                                <span asp-validation-for="Russian.Question"
+                                      class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Пояснение (объяснение)
+                                </label>
+
+                                <textarea asp-for="Russian.Description"
+                                          class="form-textarea language-description"
+                                          rows="4"
+                                          placeholder="Объясните, почему правильный ответ верный (необязательно)..."></textarea>
+
+                                <span asp-validation-for="Russian.Description"
+                                      class="form-error"></span>
+                            </div>
+                        </div>
+
+                        <div class="choices-block">
+                            <div class="choices-heading">
+                                <h3>Варианты ответов</h3>
+                                <span>Правильный ответ выбирается один раз ниже</span>
+                            </div>
+
+                            <div class="choices-editor"
+                                 data-language="russian"
+                                 id="russianChoices">
+                                @for (int i = 0; i < Model.Russian.Choices.Count; i++)
+                                {
+                                    var letter = ((char)('A' + i)).ToString();
+
+                                    <div class="choice-row">
+                                        <span class="choice-letter">@letter</span>
+
+                                        <input type="text"
+                                               name="Russian.Choices[@i].Text"
+                                               value="@Model.Russian.Choices[i].Text"
+                                               class="choice-input"
+                                               placeholder="@letter вариант ответа..." />
+                                    </div>
+                                }
+                            </div>
+
+                            <button type="button"
+                                    class="add-choice-btn"
+                                    data-editor="russianChoices"
+                                    data-prefix="Russian">
+                                + Добавить ещё вариант
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+
+            <!-- RIGHT SIDEBAR -->
+            <aside class="right-sidebar">
+
+                <!-- IMAGE -->
+                <section class="side-card image-card">
+                    <div class="side-card-title">
+                        <h3>Rasm (ixtiyoriy)</h3>
+                    </div>
+
+                    <label class="image-upload-box" for="Image">
+                        <span class="upload-icon">🖼️</span>
+                        <strong>PNG rasm yuklang</strong>
+                        <span class="upload-description">
+                            Yo'l belgisi yoki vaziyat rasmi
+                        </span>
+
+                        <span class="upload-button">
+                            Rasm tanlash
+                        </span>
+
+                        <span class="selected-file"
+                              id="selectedFileName">
+                            Fayl tanlanmagan
+                        </span>
+                    </label>
+
+                    <input asp-for="Image"
+                           type="file"
+                           accept="image/png"
+                           class="hidden-file-input"
+                           id="Image" />
+
+                    <span asp-validation-for="Image"
+                          class="form-error"></span>
+
+                    <p class="form-hint">
+                        Faqat PNG format qabul qilinadi.
+                    </p>
+                </section>
+
+
+                <!-- CORRECT ANSWER -->
+                <section class="side-card answer-card">
+                    <div class="side-card-title">
+                        <h3>To'g'ri javob (umumiy)</h3>
+                    </div>
+
+                    <p class="answer-description">
+                        To'g'ri javob barcha uchta til uchun bir xil bo'ladi.
+                    </p>
+
+                    <div class="correct-answer-list">
+
+                        @for (int i = 0; i < Model.Latin.Choices.Count; i++)
+                        {
+                            var letter = ((char)('A' + i)).ToString();
+
+                            <label class="correct-answer-option">
+                                <input type="radio"
+                                       asp-for="CorrectChoiceIndex"
+                                       value="@i"
+                                       class="correct-radio" />
+
+                                <span class="correct-letter">
+                                    @letter
+                                </span>
+
+                                <span class="correct-text"
+                                      data-correct-index="@i">
+                                    @Model.Latin.Choices[i].Text
+                                </span>
+                            </label>
+                        }
+
+                    </div>
+
+                    <div class="answer-note">
+                        <span>ⓘ</span>
+                        <span>
+                            Diqqat! To'g'ri javobni faqat bitta variantdan tanlang.
+                        </span>
+                    </div>
+
+                    <span asp-validation-for="CorrectChoiceIndex"
+                          class="form-error"></span>
+                </section>
+
+            </aside>
         </div>
+
+
+        <!-- FINAL SAVE -->
+        <section class="final-save-card">
+
+            <div class="save-status" id="saveStatus">
+                <span class="status-dot"></span>
+                <span>3 ta til ma'lumotlarini tekshiring</span>
+            </div>
+
+            <button type="submit"
+                    class="save-all-btn"
+                    id="saveAllBtn">
+                💾 BARCHASINI SAQLASH
+            </button>
+
+            <p>
+                Lotin, Kirill va Rus tillaridagi ma'lumotlar bitta test sifatida saqlanadi.
+            </p>
+        </section>
+
     </form>
 </div>
 
-<!-- Choice template used by JS to add new rows -->
-<template id="choiceRowTemplate">
+
+<!-- CHOICE TEMPLATES -->
+<template id="choiceTemplate">
     <div class="choice-row">
-        <input type="radio" name="CorrectChoiceIndex" value="__INDEX__" class="choice-radio" />
         <span class="choice-letter">__LETTER__</span>
-        <input type="text" name="Choices[__INDEX__]" class="choice-input" placeholder="Javob varianti matni..." />
+
+        <input type="text"
+               name="__PREFIX__.Choices[__INDEX__].Text"
+               class="choice-input"
+               placeholder="__PLACEHOLDER__" />
     </div>
 </template>
 
-<script>
-    (function () {
-        var editor = document.getElementById('choicesEditor');
-        var template = document.getElementById('choiceRowTemplate').innerHTML;
-        var addBtn = document.getElementById('addChoiceBtn');
 
-        addBtn.addEventListener('click', function () {
-            var index = editor.querySelectorAll('.choice-row').length;
-            var letter = String.fromCharCode(65 + index);
-            var html = template
-                .replaceAll('__INDEX__', index)
-                .replaceAll('__LETTER__', letter);
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 
-            var wrapper = document.createElement('div');
-            wrapper.innerHTML = html.trim();
-            editor.appendChild(wrapper.firstChild);
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const form = document.getElementById("createTestForm");
+            const imageInput = document.getElementById("Image");
+            const selectedFileName = document.getElementById("selectedFileName");
+            const saveStatus = document.getElementById("saveStatus");
+
+            /*
+             * ---------------------------------------------------------
+             * IMAGE
+             * ---------------------------------------------------------
+             */
+            imageInput?.addEventListener("change", function () {
+                if (!this.files || this.files.length === 0) {
+                    selectedFileName.textContent = "Fayl tanlanmagan";
+                    return;
+                }
+
+                const file = this.files[0];
+
+                if (file.type !== "image/png") {
+                    selectedFileName.textContent = "Faqat PNG fayl tanlang";
+                    this.value = "";
+                    return;
+                }
+
+                selectedFileName.textContent = file.name;
+            });
+
+
+            /*
+             * ---------------------------------------------------------
+             * ADD CHOICE
+             *
+             * Variant barcha 3 tilga bir vaqtda qo'shiladi.
+             * Shuning uchun A, B, C, D tartibi buzilmaydi.
+             * ---------------------------------------------------------
+             */
+            const addChoiceButtons =
+                document.querySelectorAll(".add-choice-btn");
+
+            const editors = {
+                latin: document.getElementById("latinChoices"),
+                cyrillic: document.getElementById("cyrillicChoices"),
+                russian: document.getElementById("russianChoices")
+            };
+
+            const placeholders = {
+                latin: "Javob varianti matni...",
+                cyrillic: "Жавоб варианти матни...",
+                russian: "Текст варианта ответа..."
+            };
+
+            function createChoiceRow(prefix, index, letter) {
+
+                const row = document.createElement("div");
+                row.className = "choice-row";
+
+                const letterSpan = document.createElement("span");
+                letterSpan.className = "choice-letter";
+                letterSpan.textContent = letter;
+
+                const input = document.createElement("input");
+                input.type = "text";
+                input.name = `${prefix}.Choices[${index}].Text`;
+                input.className = "choice-input";
+                input.placeholder = placeholders[
+                    prefix.toLowerCase()
+                ] || "Variant matni...";
+
+                row.appendChild(letterSpan);
+                row.appendChild(input);
+
+                return row;
+            }
+
+            addChoiceButtons.forEach(button => {
+
+                button.addEventListener("click", function () {
+
+                    const currentCount =
+                        editors.latin.querySelectorAll(".choice-row").length;
+
+                    const letter =
+                        String.fromCharCode(65 + currentCount);
+
+                    Object.entries(editors).forEach(([language, editor]) => {
+
+                        const prefix =
+                            language === "latin"
+                                ? "Latin"
+                                : language === "cyrillic"
+                                    ? "Cyrillic"
+                                    : "Russian";
+
+                        editor.appendChild(
+                            createChoiceRow(
+                                prefix,
+                                currentCount,
+                                letter
+                            )
+                        );
+                    });
+
+                    addCorrectAnswerOption(
+                        currentCount,
+                        letter
+                    );
+
+                    updateLanguageSaveStatus();
+                });
+            });
+
+
+            /*
+             * ---------------------------------------------------------
+             * CORRECT ANSWER
+             * ---------------------------------------------------------
+             */
+            function addCorrectAnswerOption(index, letter) {
+
+                const list =
+                    document.querySelector(".correct-answer-list");
+
+                if (!list) return;
+
+                const label = document.createElement("label");
+                label.className = "correct-answer-option";
+
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "CorrectChoiceIndex";
+                radio.value = index;
+                radio.className = "correct-radio";
+
+                const letterSpan = document.createElement("span");
+                letterSpan.className = "correct-letter";
+                letterSpan.textContent = letter;
+
+                const textSpan = document.createElement("span");
+                textSpan.className = "correct-text";
+                textSpan.dataset.correctIndex = index;
+                textSpan.textContent = ` ${letter} varianti`;
+
+                label.appendChild(radio);
+                label.appendChild(letterSpan);
+                label.appendChild(textSpan);
+
+                list.appendChild(label);
+
+                bindCorrectAnswerPreview();
+            }
+
+
+            /*
+             * ---------------------------------------------------------
+             * SHOW LATIN TEXT IN CORRECT ANSWER PANEL
+             * ---------------------------------------------------------
+             */
+            function bindCorrectAnswerPreview() {
+
+                const latinInputs =
+                    editors.latin.querySelectorAll(".choice-input");
+
+                latinInputs.forEach((input, index) => {
+
+                    input.addEventListener("input", function () {
+
+                        const target =
+                            document.querySelector(
+                                `.correct-text[data-correct-index="${index}"]`
+                            );
+
+                        if (target) {
+                            target.textContent =
+                                this.value || `${String.fromCharCode(65 + index)} varianti`;
+                        }
+
+                    });
+                });
+            }
+
+            bindCorrectAnswerPreview();
+
+
+            /*
+             * ---------------------------------------------------------
+             * LANGUAGE SAVE BUTTONS
+             *
+             * Bu tugmalar DBga yozmaydi.
+             * Faqat admin shu tilni tayyorlaganini ko'rsatadi.
+             * Oxirgi "BARCHASINI SAQLASH" DBga POST qiladi.
+             * ---------------------------------------------------------
+             */
+            const languageButtons =
+                document.querySelectorAll(".language-save-btn");
+
+            const languageReady = {
+                latin: false,
+                cyrillic: false,
+                russian: false
+            };
+
+            languageButtons.forEach(button => {
+
+                button.addEventListener("click", function () {
+
+                    const language =
+                        this.dataset.language;
+
+                    languageReady[language] = true;
+
+                    this.classList.add("is-saved");
+
+                    if (language === "latin") {
+                        this.textContent = "✓ Lotin tili tayyor";
+                    }
+
+                    if (language === "cyrillic") {
+                        this.textContent = "✓ Кирилл тайёр";
+                    }
+
+                    if (language === "russian") {
+                        this.textContent = "✓ Русский готов";
+                    }
+
+                    updateLanguageSaveStatus();
+                });
+            });
+
+
+            function updateLanguageSaveStatus() {
+
+                const count =
+                    Object.values(languageReady)
+                        .filter(Boolean)
+                        .length;
+
+                const statusText =
+                    saveStatus.querySelector("span:last-child");
+
+                if (count === 3) {
+
+                    saveStatus.classList.add("all-ready");
+
+                    statusText.textContent =
+                        "✓ Uchala til ham tayyor — umumiy saqlash mumkin";
+
+                } else {
+
+                    saveStatus.classList.remove("all-ready");
+
+                    statusText.textContent =
+                        `${count}/3 til tayyor`;
+                }
+            }
+
+
+            /*
+             * ---------------------------------------------------------
+             * FINAL VALIDATION
+             * ---------------------------------------------------------
+             */
+            form.addEventListener("submit", function (event) {
+
+                const correct =
+                    document.querySelector(
+                        'input[name="CorrectChoiceIndex"]:checked'
+                    );
+
+                const latinQuestion =
+                    document.querySelector(
+                        '[name="Latin.Question"]'
+                    );
+
+                const cyrillicQuestion =
+                    document.querySelector(
+                        '[name="Cyrillic.Question"]'
+                    );
+
+                const russianQuestion =
+                    document.querySelector(
+                        '[name="Russian.Question"]'
+                    );
+
+                if (!latinQuestion.value.trim() ||
+                    !cyrillicQuestion.value.trim() ||
+                    !russianQuestion.value.trim()) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "Iltimos, uchala tildagi savol matnini to'ldiring."
+                    );
+
+                    return;
+                }
+
+                if (!correct) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "Iltimos, umumiy to'g'ri javobni tanlang."
+                    );
+
+                    return;
+                }
+
+                /*
+                 * Choice.Answer server tomonda CorrectChoiceIndex
+                 * asosida belgilanadi.
+                 */
+            });
+
         });
-    })();
-</script>
+    </script>
+}
