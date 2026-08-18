@@ -191,15 +191,6 @@ public class TestController : Controller
             retake = true
         });
     }
-    public IActionResult CreateTest()
-    {
-        var model = new CreateTest
-        {
-            Choices = new List<string> { "", "", "", "" }, // 4 ta bo'sh variant
-            CorrectChoiceIndex = -1
-        };
-        return View(model);
-    }
     //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     private void AddCookies(string key, string value)
     {
