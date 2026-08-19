@@ -17093,5 +17093,86 @@
       "Name": ""
     },
     "Description": "c"
+  },
+  {
+    "Id": 702,
+    "Question": "Чорраҳадан биринчи бўлиб ўтади:",
+    "Choices": [
+      {
+        "Text": "А масофа",
+        "Answer": true
+      },
+      {
+        "Text": "Б масофа",
+        "Answer": false
+      },
+      {
+        "Text": "C масофа",
+        "Answer": false
+      },
+      {
+        "Text": "Д масофа",
+        "Answer": false
+      }
+    ],
+    "Media": {
+      "Exist": true,
+      "Name": "702"
+    },
+    "Description": "c"
+  },
+  {
+    "Id": 703,
+    "Question": "Трамвай ҳайдовчиси ҳаракатланаётганида светофорнинг ушбу ишорасига мувофиқ бошқа йўналишлардан ҳаракатланаётган транспорт воситаларига йўл бериши керакми?",
+    "Choices": [
+      {
+        "Text": "А масофа",
+        "Answer": true
+      },
+      {
+        "Text": "Б масофа",
+        "Answer": false
+      },
+      {
+        "Text": "C масофа",
+        "Answer": false
+      },
+      {
+        "Text": "Д масофа",
+        "Answer": false
+      }
+    ],
+    "Media": {
+      "Exist": true,
+      "Name": "703"
+    },
+    "Description": "c"
+  },
+  {
+    "Id": 704,
+    "Question": "Ушбу белги қайси турдаги транспорт воситаларини тўхтамасдан ўтишларини тақиқлайди?",
+    "Choices": [
+      {
+        "Text": "А масофа",
+        "Answer": false
+      },
+      {
+        "Text": "Б масофа",
+        "Answer": false
+      },
+      {
+        "Text": "C масофа",
+        "Answer": true
+      },
+      {
+        "Text": "Д масофа",
+        "Answer": false
+      }
+    ],
+    "Media": {
+      "Exist": true,
+      "Name": "704"
+    },
+    "Description": "c"
   }
 ]

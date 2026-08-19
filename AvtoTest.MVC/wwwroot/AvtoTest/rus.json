@@ -17080,5 +17080,86 @@
       "Name": ""
     },
     "Description": "c"
+  },
+  {
+    "Id": 702,
+    "Question": "Первый, кто проедет перекресток:",
+    "Choices": [
+      {
+        "Text": "Расстояние А",
+        "Answer": true
+      },
+      {
+        "Text": "Расстояние B",
+        "Answer": false
+      },
+      {
+        "Text": "Расстояние C",
+        "Answer": false
+      },
+      {
+        "Text": "Расстояние D",
+        "Answer": false
+      }
+    ],
+    "Media": {
+      "Exist": true,
+      "Name": "702"
+    },
+    "Description": "c"
+  },
+  {
+    "Id": 703,
+    "Question": "Обязан ли водитель трамвая уступать дорогу транспортным средствам, движущимся с других направлений, в соответствии с этим сигналом светофора во время движения?",
+    "Choices": [
+      {
+        "Text": "Расстояние А",
+        "Answer": true
+      },
+      {
+        "Text": "Расстояние B",
+        "Answer": false
+      },
+      {
+        "Text": "Расстояние C",
+        "Answer": false
+      },
+      {
+        "Text": "Расстояние D",
+        "Answer": false
+      }
+    ],
+    "Media": {
+      "Exist": true,
+      "Name": "703"
+    },
+    "Description": "c"
+  },
+  {
+    "Id": 704,
+    "Question": "Обгон каких типов транспортных средств без остановки запрещен этим знаком?",
+    "Choices": [
+      {
+        "Text": "Расстояние А",
+        "Answer": false
+      },
+      {
+        "Text": "Расстояние B",
+        "Answer": false
+      },
+      {
+        "Text": "Расстояние C",
+        "Answer": true
+      },
+      {
+        "Text": "Расстояние D",
+        "Answer": false
+      }
+    ],
+    "Media": {
+      "Exist": true,
+      "Name": "704"
+    },
+    "Description": "c"
   }
 ]

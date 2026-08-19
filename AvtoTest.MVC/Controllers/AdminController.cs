@@ -84,18 +84,18 @@ public class AdminController(IWebHostEnvironment environment) : Controller
         {
             var folder = Path.Combine(environment.WebRootPath, "AvtoTest");
             Directory.CreateDirectory(folder);
-            var fileName = $"{Id}";
+            var fileName = $"{Id}.png";
             var filePath = Path.Combine(folder, fileName);
             using var stream = new FileStream(filePath, FileMode.Create);
             await image.CopyToAsync(stream);
             
-            lotin.Media.Name = fileName;
+            lotin.Media.Name = Id.ToString();
             lotin.Media.Exist = true;
 
-            kiril.Media.Name = fileName;
+            kiril.Media.Name = Id.ToString();
             kiril.Media.Exist = true;
 
-            rus.Media.Name = fileName;
+            rus.Media.Name = Id.ToString();
             rus.Media.Exist = true;
         }
         

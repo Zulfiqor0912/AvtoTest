@@ -1,39 +1,201 @@
+/* =========================================================
+   ROOT
+   ========================================================= */
+
+:root {
+    --primary: #7C5CFF;
+    --primary-2: #5B8DFF;
+    --accent: #FF6FA5;
+    --primary-gradient: linear-gradient( 135deg, #7C5CFF 0%, #5B8DFF 55%, #4A3FE0 100% );
+    --text-primary: #10121C;
+    --text-secondary: #6B7180;
+    --text-light: #A1A6B4;
+    --bg-page: #F4F5FA;
+    --bg-white: #ffffff;
+    --bg-input: #F5F6FB;
+    --border-color: #E7E8F1;
+    --danger: #E23B5C;
+    --success: #21B573;
+    --shadow-card: 0 30px 80px -20px rgba(30, 20, 90, 0.25);
+    --shadow-soft: 0 10px 30px rgba(30, 20, 90, 0.08);
+    --radius-xl: 28px;
+    --radius: 18px;
+    --radius-sm: 14px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* =========================================================
+   GENERAL
+   ========================================================= */
+
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient( 135deg, #7C5CFF 0%, #5B8DFF 55%, #4A3FE0 100% );
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+
+/* =========================================================
+   BOOTSTRAP FOCUS
+   ========================================================= */
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar {
+    min-height: 70px;
+    /*
+       Navbar gradient bilan bir xil
+       umumiy fon ustida turadi.
+    */
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin-bottom: 0 !important;
+    position: relative;
+    z-index: 1000;
 }
+
+
+    /* Navbar container */
+
+    .navbar .container-fluid {
+        width: 100%;
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+
+
+/* Navbar content */
+
+.navbar-content {
+    width: 100%;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* =========================================================
+   NAVBAR BRAND
+   ========================================================= */
+
+.navbar-brand {
+    color: white !important;
+    font-size: 22px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+    .navbar-brand:hover {
+        color: rgba(255, 255, 255, 0.8) !important;
+    }
+
+
+/* =========================================================
+   NAVBAR MENU
+   ========================================================= */
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+
+    .navbar-nav .nav-item {
+        list-style: none;
+    }
+
+
+    .navbar-nav .nav-link {
+        color: white !important;
+        padding: 10px 16px !important;
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+
+        .navbar-nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white !important;
+        }
+
+
+        .navbar-nav .nav-link.active {
+            background: rgba(255, 255, 255, 0.18);
+            color: white !important;
+        }
+
+
+/* =========================================================
+   LOGIN / ACCOUNT
+   ========================================================= */
+
+.navbar-account {
+    display: flex;
+    align-items: center;
+}
+
+
+/* =========================================================
+   PAGE CONTAINER
+   ========================================================= */
+
+/*
+   Bootstrap .container'ni bu yerda qayta yozmaymiz.
+
+   Chunki:
+
+   .container {
+       margin: 50px auto;
+   }
+
+   qilsangiz navbar ostida 50px ortiqcha joy paydo bo'ladi.
+*/
 
 .container {
     width: 80%;
-    margin: 50px auto;
+    margin-left: auto;
+    margin-right: auto;
 }
+
+
+/* =========================================================
+   LANGUAGES
+   ========================================================= */
 
 .languages {
     display: flex;
@@ -41,6 +203,7 @@ body {
     align-items: center;
     gap: 20px;
 }
+
 
     .languages button {
         width: 120px;
@@ -52,10 +215,16 @@ body {
         color: green;
     }
 
+
         .languages button:active {
             background-color: rgba(155, 151, 151, 0.513);
             transition: 0.1s;
         }
+
+
+/* =========================================================
+   PAGINATION PART
+   ========================================================= */
 
 .paginition_part {
     width: 100%;
@@ -64,6 +233,7 @@ body {
     align-items: center;
     margin-top: 50px;
 }
+
 
 .finish_test_button {
     width: 200px;
@@ -75,63 +245,83 @@ body {
     cursor: pointer;
 }
 
-/* pagination position styling */
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
 .pagination_section {
     position: relative;
 }
 
-    /* pagination styling */
+
     .pagination_section a {
         color: black;
         padding: 10px 18px;
         text-decoration: none;
     }
 
-        /* pagination hover effect on non-active */
+
         .pagination_section a:hover:not(.active) {
             background-color: #031f3b;
             color: white;
         }
 
-/* pagination hover effect on active*/
 
-a:nth-child(1) {
-    font-weight: bold;
-}
-.active {
-    background-color: #87CEEB;
-    color: white;
-}
+        .pagination_section a:nth-child(1) {
+            font-weight: bold;
+        }
+
+
+    .pagination_section .active {
+        background-color: #87CEEB;
+        color: white;
+    }
+
+
+/* =========================================================
+   ANSWERS
+   ========================================================= */
+
 .correctAnswer {
     background-color: forestgreen;
     color: white;
 }
+
 
 .incorrectAnswer {
     background-color: red;
     color: white;
 }
 
-/* timer */
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
 .base-timer {
     position: relative;
     width: 200px;
     height: 200px;
 }
 
+
 .base-timer__svg {
     transform: scaleX(-1);
 }
+
 
 .base-timer__circle {
     fill: none;
     stroke: none;
 }
 
+
 .base-timer__path-elapsed {
     stroke-width: 7px;
     stroke: grey;
 }
+
 
 .base-timer__path-remaining {
     stroke-width: 7px;
@@ -143,17 +333,21 @@ a:nth-child(1) {
     stroke: currentColor;
 }
 
+
     .base-timer__path-remaining.green {
         color: rgb(65, 184, 131);
     }
+
 
     .base-timer__path-remaining.orange {
         color: orange;
     }
 
+
     .base-timer__path-remaining.red {
         color: red;
     }
+
 
 .base-timer__label {
     position: absolute;
@@ -166,20 +360,32 @@ a:nth-child(1) {
     font-size: 48px;
 }
 
+
+/* =========================================================
+   QUESTION
+   ========================================================= */
+
 .question_part {
     width: 100%;
     margin-top: 50px;
 }
+
 
     .question_part p {
         width: 100%;
         text-align: center;
     }
 
+
 .line {
     width: 100%;
     border-bottom: 1px solid gray;
 }
+
+
+/* =========================================================
+   VARIANTS
+   ========================================================= */
 
 .variants_part {
     width: 100%;
@@ -188,17 +394,21 @@ a:nth-child(1) {
     justify-content: space-between;
 }
 
+
 .image_part {
     width: 48%;
 }
+
 
     .image_part img {
         width: 100%;
     }
 
+
 .variant {
     width: 50%;
 }
+
 
     .variant input {
         width: calc(100% - 15px);
@@ -208,3 +418,159 @@ a:nth-child(1) {
     }
 
 
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+    .navbar {
+        min-height: 60px;
+    }
+
+
+    .navbar-content {
+        min-height: 60px;
+    }
+
+
+    .navbar .container-fluid {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+
+    .navbar-brand {
+        font-size: 19px;
+    }
+
+
+    .navbar-nav {
+        gap: 4px;
+    }
+
+
+        .navbar-nav .nav-link {
+            padding: 8px 10px !important;
+            font-size: 14px;
+        }
+
+
+    .container {
+        width: 92%;
+    }
+}
+
+/* =========================================================
+   LOGIN PARTIAL
+   ========================================================= */
+
+.login-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+}
+
+
+    /* User name */
+
+    .login-nav .user-link {
+        color: white !important;
+        padding: 10px 16px !important;
+        border-radius: var(--radius-sm);
+        font-weight: 500;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+
+        .login-nav .user-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white !important;
+        }
+
+
+    /* Login / Register */
+
+    .login-nav .nav-link {
+        color: white !important;
+        padding: 10px 16px !important;
+        border-radius: var(--radius-sm);
+        font-weight: 500;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+
+        .login-nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white !important;
+        }
+
+
+    /* Login button */
+
+    .login-nav .login-button {
+        background: white;
+        color: var(--primary) !important;
+        padding: 9px 20px !important;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+    }
+
+
+        .login-nav .login-button:hover {
+            background: #F4F1FF;
+            color: var(--primary-2) !important;
+            transform: translateY(-1px);
+        }
+
+
+/* Logout form */
+
+.logout-form {
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Logout button */
+
+.login-nav .logout-button {
+    background: transparent;
+    border: none;
+    color: white !important;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+
+    .login-nav .logout-button:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white !important;
+    }
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+    .login-nav {
+        gap: 4px;
+    }
+
+        .login-nav .nav-link,
+        .login-nav .user-link {
+            padding: 8px 10px !important;
+            font-size: 14px;
+        }
+
+        .login-nav .login-button {
+            padding: 8px 14px !important;
+        }
+}

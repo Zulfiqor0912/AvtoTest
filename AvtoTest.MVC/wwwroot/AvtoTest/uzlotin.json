@@ -17093,5 +17093,86 @@
       "Name": ""
     },
     "Description": "s"
+  },
+  {
+    "Id": 702,
+    "Question": "Chorrahadan birinchi bo'lib o'tadi:",
+    "Choices": [
+      {
+        "Text": "A masofa",
+        "Answer": true
+      },
+      {
+        "Text": "B masofa",
+        "Answer": false
+      },
+      {
+        "Text": "C masofa",
+        "Answer": false
+      },
+      {
+        "Text": "D masofa",
+        "Answer": false
+      }
+    ],
+    "Media": {
+      "Exist": true,
+      "Name": "702"
+    },
+    "Description": "s"
+  },
+  {
+    "Id": 703,
+    "Question": "Tramvay haydovchisi harakatlanayotganida svetoforning ushbu ishorasiga muvofiq boshqa yo'nalishlardan harakatlanayotgan transport vositalariga yo'l berishi kerakmi?",
+    "Choices": [
+      {
+        "Text": "A masofa",
+        "Answer": true
+      },
+      {
+        "Text": "B masofa",
+        "Answer": false
+      },
+      {
+        "Text": "C masofa",
+        "Answer": false
+      },
+      {
+        "Text": "D masofa",
+        "Answer": false
+      }
+    ],
+    "Media": {
+      "Exist": true,
+      "Name": "703"
+    },
+    "Description": "s"
+  },
+  {
+    "Id": 704,
+    "Question": "Ushbu belgi qaysi turdagi transport vositalarini to'xtamasdan o'tishlarini taqiqlaydi?",
+    "Choices": [
+      {
+        "Text": "A masofa",
+        "Answer": false
+      },
+      {
+        "Text": "B masofa",
+        "Answer": false
+      },
+      {
+        "Text": "C masofa",
+        "Answer": true
+      },
+      {
+        "Text": "D masofa",
+        "Answer": false
+      }
+    ],
+    "Media": {
+      "Exist": true,
+      "Name": "704"
+    },
+    "Description": "s"
   }
 ]

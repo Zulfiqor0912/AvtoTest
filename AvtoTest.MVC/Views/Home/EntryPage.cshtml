@@ -2,47 +2,94 @@
     Layout = "_Layout";
 }
 
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+      href="~/css/entry.css"
+      asp-append-version="true" />
 
-    <title>E-AVTOMAKTAB</title>
 
-    <link rel="stylesheet" href="~/css/entry.css" asp-append-version="true">
-</head>
-<body>
+<main class="hero">
 
-    <main class="hero">
+    <div class="hero-content">
 
-        <div class="hero-content">
+        <!-- Logo -->
 
-            <h1>Avto Test</h1>
+        <div class="hero-logo">
 
-            <p>Bilimingizni sinang</p>
+            <span class="hero-logo-icon">
+                AT
+            </span>
 
-            <div class="button-row">
-                <a class="start-button" asp-controller="Test" asp-action="Tickets">
-                    TESTNI BOSHLASH
+            <span class="hero-logo-text">
+                AvtoTest<span>.MVC</span>
+            </span>
+
+        </div>
+
+
+        <!-- Badge -->
+
+        <span class="hero-badge">
+
+            <span class="badge-dot"></span>
+
+            2026 YHQ savollari
+
+        </span>
+
+
+        <!-- Title -->
+
+        <h1>
+            Avto test — Prava test va YHQ testlar 2026
+        </h1>
+
+
+        <!-- Description -->
+
+        <p>
+            YHQ testlari, yo'l belgilari va 63 variant —
+            haydovchilik guvohnomasi imtihoniga
+            bepul onlayn tayyorgarlik
+        </p>
+
+
+        <!-- Buttons -->
+
+        <div class="button-row">
+
+            <a class="start-button start-button--primary"
+               asp-controller="Test"
+               asp-action="Tickets">
+
+                ▶ Testni boshlash
+
+            </a>
+
+
+            @if (User.Identity is not null &&
+                 User.Identity.IsAuthenticated &&
+                 User.IsInRole("Admin"))
+            {
+                <a class="start-button start-button--admin"
+                   asp-controller="Admin"
+                   asp-action="CreateTest">
+
+                    + Test qo'shish
+
                 </a>
-
-                @if (User.Identity is not null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                {
-                    <a class="start-button admin-button" asp-controller="Admin" asp-action="CreateTest">
-                        YANGI TEST QO'SHISH
-                    </a>
-                }
-            </div>
+            }
 
         </div>
 
-        <div class="hero-image">
-            <img src="~/images/testentry.png"
-                 alt="E-Avtomaktab">
+
+        <!-- Footer -->
+
+        <div class="hero-footer">
+
+            © 2026 AvtoTest.MVC — Barcha huquqlar himoyalangan
+
         </div>
 
-    </main>
+    </div>
 
-</body>
-</html>
+</main>
