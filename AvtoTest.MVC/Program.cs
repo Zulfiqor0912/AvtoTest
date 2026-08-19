@@ -106,7 +106,6 @@ using (var scopeService = app.Services.CreateScope())
         };
 
         await userManager.CreateAsync(user, password);
-
         await userManager.AddToRoleAsync(user, role);
     }
 }

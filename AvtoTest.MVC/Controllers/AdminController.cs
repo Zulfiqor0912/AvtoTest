@@ -2,11 +2,12 @@
 using AvtoTest.Data.Entities.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 using System.IO;
 
 namespace AvtoTest.MVC.Controllers;
 
-public class AdminController : Controller
+public class AdminController(IWebHostEnvironment environment) : Controller
 {
     public IActionResult CreateTest()
     {
@@ -43,7 +44,7 @@ public class AdminController : Controller
         };
         return model;
     }
-    private void ReadAndAddTest(Test lotin, Test kiril, Test rus, IFormFile image)
+    private async Task ReadAndAddTest(Test lotin, Test kiril, Test rus, IFormFile image)
     {
         string rusJson = System.IO.File.ReadAllText(@"./wwwroot/AvtoTest/rus.json");
         string lotinJson = System.IO.File.ReadAllText(@"./wwwroot/AvtoTest/uzlotin.json");
@@ -78,6 +79,25 @@ public class AdminController : Controller
         lotin.Id = Id;
         kiril.Id = Id;
         rus.Id = Id;
+
+        if (image != null && image.Length > 0)
+        {
+            var folder = Path.Combine(environment.WebRootPath, "AvtoTest");
+            Directory.CreateDirectory(folder);
+            var fileName = $"{Id}";
+            var filePath = Path.Combine(folder, fileName);
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await image.CopyToAsync(stream);
+            
+            lotin.Media.Name = fileName;
+            lotin.Media.Exist = true;
+
+            kiril.Media.Name = fileName;
+            kiril.Media.Exist = true;
+
+            rus.Media.Name = fileName;
+            rus.Media.Exist = true;
+        }
         
         lotinTests.Add(lotin);
         kirilTests.Add(kiril);
@@ -88,13 +108,11 @@ public class AdminController : Controller
             Formatting = Formatting.Indented,
             NullValueHandling = NullValueHandling.Ignore
         });
-
         var newKirilJson = JsonConvert.SerializeObject(kirilTests, new JsonSerializerSettings
         {
             Formatting = Formatting.Indented,
             NullValueHandling = NullValueHandling.Ignore
         });
-
         var newRusJson = JsonConvert.SerializeObject(rusTests, new JsonSerializerSettings
         {
             Formatting = Formatting.Indented,
